@@ -21,6 +21,11 @@
             "python_file":"maya_checkin.py"
         },
         {
+            "icon":"checkin.xpm",
+            "annotation":"Checkin the current file (NEW)",
+            "python_file":"maya_checkin_new.py"
+        },
+        {
             "icon":"savebutton.xpm",
             "annotation":"Version up the current file",
             "python_file":"maya_save_version.py"
@@ -74,16 +79,6 @@
             "icon":"delete.xpm",
             "annotation":"Rename or Delete shots or Copy animation to previs",
             "python_file":"maya_edit_shot.py"
-        },
-		{
-		        "icon":"AndrePickerImage.xpm",
-		        "annotation":"Andre Control Picker",
-		        "python_file":"andre_gui.py"
-		},
-		{
-		        "icon":"studio_library.xpm",
-		        "annotation":"Studio Library",
-		        "python_file":"studio_library.py"
-		}
+        }
     ]
 }

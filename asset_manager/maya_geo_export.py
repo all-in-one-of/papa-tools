@@ -171,6 +171,7 @@ def installGeometry(path=''):
 		@return: True is the files were moved successfully
 		@throws: a shutil exception if the move failed
 	'''
+	print "install newly created geo in files"
 	path=os.path.dirname(mc.file(q=True, sceneName=True))
 	assetName, assetType, version = decodeFileName()
 
@@ -192,13 +193,13 @@ def installGeometry(path=''):
 			print e
 			print 'Couldn\'t delete old abc files.'
 
-	print 'Copying '+srcOBJ+' to '+destOBJ
+	#print 'Copying '+srcOBJ+' to '+destOBJ
 	try:
 		shutil.copytree(srcOBJ, destOBJ)
 	except Exception as e:
 		print e
 
-	print 'Copying '+srcBJSON+' to '+destBJSON
+	#print 'Copying '+srcBJSON+' to '+destBJSON
 	try:
 		shutil.copytree(src=srcBJSON, dst=destBJSON)
 	except Exception as e:
@@ -208,7 +209,7 @@ def installGeometry(path=''):
 	srcABC = os.path.join(srcABC, '*');
 	if not os.path.exists(destABC):
 		os.mkdir(destABC);
-	print 'Copying '+srcABC+' to '+destABC
+	#print 'Copying '+srcABC+' to '+destABC
 	try:
 		os.system('chmod 774 -R '+srcABC)
 		result = os.system('mv -f '+srcABC+' '+destABC)
@@ -217,7 +218,7 @@ def installGeometry(path=''):
 	except Exception as e:
 		print e
 
-	print 'Removing '+os.path.join(path, 'geo')
+	#print 'Removing '+os.path.join(path, 'geo')
 	shutil.rmtree(os.path.join(path, 'geo'))
 
 	return True
