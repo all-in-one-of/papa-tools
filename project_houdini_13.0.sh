@@ -6,7 +6,7 @@
 if [ -z "${HFS}" ]
 then
     # The default HFS directory if it isn't already defined
-    export HFS=/opt/hfs14.0.201.13
+    export HFS=/opt/hfs13.0.343
 fi
 
 # source current houdini setup

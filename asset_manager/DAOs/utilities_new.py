@@ -692,14 +692,14 @@ def _isMayaFile(filename):
 	
 def install(vDirPath, srcFilePath):
 	"""
-	Installs a file for production use and flattens maya/houdini dependencies.
+	Installs a file for production use (in the stable directory) and flattens maya/houdini dependencies.
 	Use getAvailableInstallFiles(dirPath) to get a list of files.
 	@precondition: vDirPath and srcFilePath are valid paths
 	@postcondition: if setStable == True then stable symlink will point to filename
 	"""
 	print 'utilities, install'
-	print vDirPath
-	print srcFilePath
+	print 'vDirPath ', vDirPath
+	print 'srcFilePath ', srcFilePath
 	stableDir = os.path.join(vDirPath, "stable")
 	backupsDir = os.path.join(stableDir, 'backups')
 	numFiles = len(glob.glob(os.path.join(backupsDir, '*')))
@@ -712,9 +712,9 @@ def install(vDirPath, srcFilePath):
 		shutil.move(os.path.join(stableDir, stableName+srcExt), os.path.join(backupsDir, stableName+'_'+str(numFiles)+srcExt))
 	
 	newInstFilePath = os.path.join(stableDir, stableName+srcExt)
-	print newInstFilePath
+	print newInstFilePath # newInstFilePath is the location of the stable reference.
 	
-	shutil.copy(srcFilePath, newInstFilePath)
+	shutil.copy(srcFilePath, newInstFilePath) # This copies the latest version to the stable
 	return newInstFilePath
 
 def runAlembicConverter(vDirPath, srcFilePath, filename=None):

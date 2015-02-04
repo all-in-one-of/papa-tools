@@ -1,5 +1,6 @@
 import asset_manager.DAOs.getItemsDAO as getItems
 import asset_manager.DAOs.newAnimationDAO as animation
+import asset_manager.DAOs.checkinDAO as checkinDAO
 from _xmlplus.dom.javadom import Text
 
 def getAssetPath(self, assetName, location):
@@ -72,4 +73,15 @@ def getCheckoutDest(self):
 def getVersionedFolderInfo(self):
     return
     
+def canCheckin(filePath):
+    print "In facade canCheckin ", filePath
+    # This will check if a user can check in a particular file.
     
+    return checkinDAO.canCheckin(filePath)
+
+def checkin(asset, comment, toInstall):
+    # This will checkin the asset and free it for others to checkout.
+    checkinDest = checkinDAO.checkin(asset, comment)
+
+    # Then in here we'll update the install files, as well.
+    checkinDAO.installFiles(toInstall, checkinDest)
