@@ -70,6 +70,23 @@ def getCheckoutDest(self):
 # get checkout destination
     return
 
+
+def getCheckinDest(filePath):
+# for rollback 
+    return
+
+def tempSetVersion(toCheckout, version)
+# for rollback
+    return
+def getVersionComment(checkInDest,asset_version)
+# for rollback
+    return
+def discard()
+# for rollback 
+    return
+def tempSetVersion(toCheckout, latestVersion)
+#for rollback
+    return
 def getVersionedFolderInfo(self):
     return
     
