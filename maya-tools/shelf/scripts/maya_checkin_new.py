@@ -1,5 +1,5 @@
 import maya.cmds as cmds
-import utilities as amu #asset manager utilities
+# import utilities as amu #asset manager utilities
 import maya_geo_export as geo
 import os
 import Facade.facade as facade
@@ -43,10 +43,10 @@ def checkin():
     saveFile() # save the file before doing anything
     print 'File saved'
 
-    filePath = cmds.file(q=True, sceneName=True)
+    fileName = cmds.file(q=True, sceneName=True)
     toInstall = checkAssetType('rig')
 
-    if facade.canCheckin(filePath) and saveGeo(): # objs must be saved before checkin
+    if facade.canCheckin(fileName) and saveGeo(): # objs must be saved before checkin
         print "Can check in."
         comment = 'Comment'
         commentPrompt = cmds.promptDialog(
@@ -63,7 +63,7 @@ def checkin():
             return
         saveFile() # One more save
         cmds.file(force=True, new=True) # Open a new file.
-        checkinDest = facade.checkin(filePath, comment, toInstall) # checkin, install to stable directories.
+        checkinDest = facade.checkin(fileName, comment, toInstall) # checkin, install to stable directories.
     else:
         showFailDialog()
 

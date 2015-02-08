@@ -27,6 +27,10 @@ def getPrevis(self):
 def getAssets(self):
     return getItems(self, os.environ['ASSETS_DIR'])
 
+def getUserCheckoutDir(self):
+    return os.path.join(os.environ['USER_DIR'], 'checkout')
+
+
 def getItems(self, folder):
     tree = QListWidget()
     tree.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)

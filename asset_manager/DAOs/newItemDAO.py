@@ -1,18 +1,9 @@
 import os, glob, time
 import shutil
+import asset_manager.DAOs.utilities_new as amu
 from ConfigParser import ConfigParser
 
-def _writeConfigFile(filePath, configParser):
-    """
-    Will update the config file specified by filePath with the contents of configParser
-    @precondition: filePath is a valid path
-    @precondition: confgParser is an instance of ConfigParser()
-    """
-    configFile = open(filePath, 'wb')
-    configParser.write(configFile)
-       
-def getUsername():
-    return os.environ['USER']
+# This DAO creates new assets, previs and animation shots.
 
 def createNodeInfoFile(dirPath, toKeep):
     """
@@ -22,7 +13,8 @@ def createNodeInfoFile(dirPath, toKeep):
     @postcondition: All sections/tags are created and set except "Type".
         "Type" must be set by concrete nodes.
     """
-    username = getUsername()
+    print "in createNodeInfoFile"
+    username = amu.getUsername()
     timestamp = time.strftime("%a, %d %b %Y %I:%M:%S %p", time.localtime())
     
     nodeInfo = ConfigParser()
@@ -40,7 +32,7 @@ def createNodeInfoFile(dirPath, toKeep):
     nodeInfo.add_section('Comments')
     nodeInfo.set('Comments', 'v000', 'New')
 
-    _writeConfigFile(os.path.join(dirPath, ".nodeInfo"), nodeInfo)
+    amu._writeConfigFile(os.path.join(dirPath, ".nodeInfo"), nodeInfo)
 
 def addProjectFolder(parent, name):
     newPath = os.path.join(parent, name)
@@ -67,10 +59,8 @@ def copyTemplateAnimation(self, shotName):
         print 'copied '+template+' to '+dest
     return
 
-def createNewShotFolders(name):
-    if(name == 'Model' or name == 'Rig'):
-        parent = os.environ['ASSETS_DIR']
-    if(name == 'Animation'):
+def createNewShotFolders(parent, name):
+    if(parent == 'Animation'):
         parent = os.environ['SHOTS_DIR']
         
     if parent != os.environ['SHOTS_DIR']:
@@ -91,7 +81,7 @@ def createNewShotFolders(name):
     addProjectFolder(os.path.join(new_dir, 'renders'), 'lighting')
     addProjectFolder(os.path.join(new_dir, 'renders'), 'compositing')
 
-def createNewPrevisFolders(name):
+def createNewPrevisFolders(parent, name):
     parent = os.environ['PREVIS_DIR']
     # This is basically the same as "createNewShotFolders" method
     # doesn't include a lighting folder; may need to add/remove additional folders for production
@@ -110,3 +100,15 @@ def createNewPrevisFolders(name):
     addProjectFolder(new_dir, 'renders')
     addProjectFolder(os.path.join(new_dir, 'renders'), 'lighting')
     addProjectFolder(os.path.join(new_dir, 'renders'), 'compositing')
+
+
+def createNewAssetFolders(parent, name):
+    new_dir = os.path.join(parent, name)
+    addProjectFolder(parent, name)
+    addVersionedFolder(new_dir, 'model', 5)
+    addVersionedFolder(new_dir, 'rig', -1)
+    addVersionedFolder(new_dir, 'otl', -1)
+    os.makedirs(os.path.join(new_dir, "geo"))
+    os.makedirs(os.path.join(new_dir, "images"))
+    os.makedirs(os.path.join(new_dir, "reference"))
+    return new_dir
