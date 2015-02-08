@@ -3,6 +3,8 @@ This module contains functionality to manage the animation project.
 @author: Morgan Strong, Brian Kingery
 """
 
+# TODO: Is it possible to separate all of the ConfigParser code into their separate DAOs? How much overlap is there?
+
 import os, time, shutil, glob, pwd, tempfile, smtplib, re
 from ConfigParser import ConfigParser
 
@@ -325,6 +327,7 @@ def _createCheckoutInfoFile(dirPath, coPath, version, timestamp, lock):
 	
 	_writeConfigFile(os.path.join(dirPath, ".checkoutInfo"), chkoutInfo)
 
+#TODO: a lot of these below are used for checkout. Do we need all of these? 
 def isCheckedOut(dirPath):
 	nodeInfo = os.path.join(dirPath, ".nodeInfo")
 	if not os.path.exists(nodeInfo):
@@ -333,7 +336,7 @@ def isCheckedOut(dirPath):
 	cp.read(nodeInfo)
 	return cp.getboolean("Versioning", "locked")
 
-def checkedOutByMe(dirPath):
+def checkedOutByMe(dirPath): # I feel like this should be checking both if it is locked and if it is checked out by the current user...
 	nodeInfo = os.path.join(dirPath, ".nodeInfo")
 	if not os.path.exists(nodeInfo):
 		return False
@@ -350,15 +353,16 @@ def getFilesCheckoutTime(filePath):
 	cp.read(checkoutInfo)
 	return cp.get("Checkout", "checkouttime")
 
-def canCheckout(coPath):
-	result = True
-	if not os.path.exists(os.path.join(coPath, ".nodeInfo")):
-		result = False
-	nodeInfo = ConfigParser()
-	nodeInfo.read(os.path.join(coPath, ".nodeInfo"))
-	if nodeInfo.get("Versioning", "locked") == "True":
-		result = False
-	return result
+# Exactly the same as isCheckedOut. Removing.
+# def canCheckout(coPath):
+# 	result = True
+# 	if not os.path.exists(os.path.join(coPath, ".nodeInfo")):
+# 		result = False
+# 	nodeInfo = ConfigParser()
+# 	nodeInfo.read(os.path.join(coPath, ".nodeInfo"))
+# 	if nodeInfo.get("Versioning", "locked") == "True":
+# 		result = False
+# 	return result
 
 def getCheckoutDest(coPath):
 	nodeInfo = ConfigParser()

@@ -7,9 +7,7 @@ import sip
 import os, glob
 import shutil
 import utilities as amu
-
 import Facade.facade as facade
-import DAOs.getItemsDAO as dao
 
 CHECKOUT_WINDOW_WIDTH = 340
 CHECKOUT_WINDOW_HEIGHT = 575
@@ -18,6 +16,7 @@ def maya_main_window():
 	ptr = omu.MQtUtil.mainWindow()
 	return sip.wrapinstance(long(ptr), QObject)
 
+# Checkout content is the individual setup for each possible asset to checkout.
 class CheckoutContext:
 	def __init__(self, parent, name, can_create):
 		# name of this checkout context (i.e. Model, Rig, Animation)
@@ -25,12 +24,11 @@ class CheckoutContext:
 		# enable a New/Create button for this context
 		self.can_create = can_create
 		# intialize self.tree (the widget)
-		self.get_items()
+		self.get_items(parent)
 		# no filtering, to start out with
 		self.cur_filter = ''
 
-	def get_items(self):
-		
+	def get_items(self, parent):
 		if(self.name == 'Model'):
 			self.tree = facade.getAssets(self)
 		if(self.name == 'Rig'):
@@ -39,6 +37,9 @@ class CheckoutContext:
 			self.tree = facade.getPrevis(self)
 		if(self.name == "Animation"):
 			self.tree = facade.getShots(self)
+
+		# Then we need to bind the selection handler.
+		self.tree.currentItemChanged.connect(parent.set_current_item)
 
 	def add_item(self, name):
 		# adds an item to the tree, with the given folder basename
@@ -69,7 +70,7 @@ class CheckoutContext:
 				self.tree.setCurrentItem(None)
 		
 
-
+# CheckoutDialog is the Dialog window for the Checkout button.
 class CheckoutDialog(QDialog):
 	def __init__(self, parent=maya_main_window()):
 		#Setup the different checkout contexts
@@ -161,15 +162,17 @@ class CheckoutDialog(QDialog):
 		text, ok = QInputDialog.getText(self, 'New Shot', 'Enter seq_shot (ie: a01)')
 		if ok:
 			text = str(text)
-			print "Trying to create" + text
+			print "Trying to create" + text + self.context.name
 			facade.newAnimation(self, self.context.name, text)
 			self.context.add_item(text)
 			self.refresh()
 		return
 	
+	# TODO: Is this something we want to remove or not?
 	def get_filename(self, parentdir):
 		return os.path.basename(os.path.dirname(parentdir))+'_'+os.path.basename(parentdir)
 
+	# TODO: Clean this up so it is not used anymore.
 	def get_asset_path(self):
 		# returns the path for a single asset
 		asset_name = str(self.current_item.text())
@@ -201,16 +204,16 @@ class CheckoutDialog(QDialog):
 
 
 	def unlock(self):
-		print("unlocking!!!!")
+		print("Unlocking.")
 		
 		toUnlock = self.get_asset_path()
-		if amu.isLocked(toUnlock):
+		if facade.isLocked(self, toUnlock):
 			if self.showConfirmUnlockDialog() == 'No':
 				return
 			if cmd.file(q=True, sceneName=True) != "":
 				cmd.file(save=True, force=True)	
 			cmd.file(force=True, new=True) #open new file
-			amu.unlock(toUnlock)
+			facade.unlock(self, toUnlock)
 			self.showUnlockedDialog()	
 		else:
 			self.showIsLockedDialog()
@@ -223,17 +226,18 @@ class CheckoutDialog(QDialog):
 	# SLOTS
 	########################################################################
 	def checkout(self):
+
+		# If it's not a file that hasn't been saved before, save it.
 		curfilepath = cmd.file(query=True, sceneName=True)
 		if not curfilepath == '':
 			cmd.file(save=True, force=True)
 
-		toCheckout = self.get_asset_path()
-		
+		itemToCheckout = str(self.current_item.text())
 		try:
-			destpath = amu.checkout(toCheckout, True)
+			filePath = facade.checkout(self, itemToCheckout, True, self.context.name)
 		except Exception as e:
 			print str(e)
-			if not amu.checkedOutByMe(toCheckout):
+			if not facade.checkedOutByMe(self, itemToCheckout, self.context.name):
 				cmd.confirmDialog(  title          = 'Can Not Checkout'
                                    , message       = str(e)
                                    , button        = ['Ok']
@@ -242,14 +246,18 @@ class CheckoutDialog(QDialog):
                                    , dismissString = 'Ok')
 				return
 			else:
-				destpath = amu.getCheckoutDest(toCheckout)
+				filePath = facade.getCheckoutDest(self, itemToCheckout, self.context.name)
 
-		toOpen = os.path.join(destpath, self.get_filename(toCheckout)+'.mb')
-		# open the file
+		# Adding the file path together so we can open the file.
+		userFilePath = facade.getFilename(self, filePath, itemToCheckout, self.context.name)
+		toOpen = userFilePath + ".mb"
+		print "maya filePath", toOpen
+
+		# # open the file
 		if os.path.exists(toOpen):
 			cmd.file(toOpen, force=True, open=True)#, loadReferenceDepth="none")
 		else:
-			# create new file
+			# create new file - for new assets
 			cmd.file(force=True, new=True)
 			cmd.file(rename=toOpen)
 			cmd.viewClipPlane('perspShape', ncp=0.01)

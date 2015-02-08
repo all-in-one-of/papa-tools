@@ -1,6 +1,8 @@
 import asset_manager.DAOs.getItemsDAO as getItems
-import asset_manager.DAOs.newAnimationDAO as animation
+import asset_manager.DAOs.newItemDAO as newItem
+import asset_manager.DAOs.checkoutDAO as checkoutDAO
 import asset_manager.DAOs.checkinDAO as checkinDAO
+import asset_manager.DAOs.rollbackDAO as rollbackDAO
 from _xmlplus.dom.javadom import Text
 
 def getAssetPath(self, assetName, location):
@@ -9,12 +11,12 @@ def getAssetPath(self, assetName, location):
     return path
 
 def newAnimation(self, name, inputText):
-    # create a new animation
+    # create a new getItem
     if(name == 'Previs'):
-        animation.createNewPrevisFolders(inputText)
+        newItem.createNewPrevisFolders(name, inputText)
     else:
-        animation.createNewShotFolders(name)
-    animation.copyTemplateAnimation(self, inputText)
+        newItem.createNewShotFolders(name, inputText)
+    newItem.copyTemplateAnimation(self, inputText)
     return
 
 def getShots(self):
@@ -32,6 +34,13 @@ def getAssets(self):
     tree = getItems.getAssets(self)
     return tree
 
+def getVersions(self, origFileName):
+    """
+    Returns the versions of an asset.
+    """
+    return rollbackDAO.getVersions(self, origFileName)
+
+# The checkout method works for both shots and assets currently, at least in Maya... do we need checkoutShot and checkoutAsset here?
 def checkoutShot(self, shot, user):
 # check out the indicated shot for the given user
     return
@@ -50,41 +59,55 @@ def createNewPrevisFolder(self):
 def createNewShotFolder(self):
     return
 
-def isLocked(self):
+def isLocked(self, toUnlock):
 # check if scene is LOCKED
-    return
+    return checkoutDAO.isLocked(toUnlock)
 
-def unlock(self):
+def unlock(self, toUnlock):
 # unlock an asset
-    return
+    return checkoutDAO.unlock(toUnlock)
 
-def checkout(self):
-# checkout a shot
-    return
+def checkout(self, toCheckout, lock, location):
+    # Checkout an asset or shot. 
+    # Need to first grab the path in here. Not the best place, but I guess it makes sense.
+    coPath = getAssetPath(self, toCheckout, location)
 
-def checkedOutByMe(self):
-# is this checked out by me?
-    return
+    # The checkout command will return the destination of the item that is checked out.
+    filePath = checkoutDAO.checkout(coPath, lock)
+    
+    print "facade filePath ", filePath
+    return filePath
+    # return checkoutDAO.checkout(coPath, lock)
 
-def getCheckoutDest(self):
-# get checkout destination
-    return
+def checkedOutByMe(self, itemToCheckout, location):
+    # Checks if this item is checked out by the user.
+    coPath = getAssetPath(self, itemToCheckout, location)
+    return checkoutDAO.checkedOutByMe(coPath)
 
+def getCheckoutDest(self, itemToCheckout, location):
+    # get checkout destination
+    coPath = getAssetPath(self, itemToCheckout, location)
+    return checkoutDAO.getCheckoutDest(coPath)
+
+def getFilename(self, filePath, itemToCheckout, location):
+    # Gets the filename of the item. Needs to combine some stuff. I guess we could call this in the checkoutDAO...?
+    coPath = getAssetPath(self, itemToCheckout, location)
+    return checkoutDAO.getFilename(filePath, coPath)
 
 def getCheckinDest(filePath):
 # for rollback 
     return
 
-def tempSetVersion(toCheckout, version)
+def tempSetVersion(toCheckout, version):
+ # for rollback
+    return
+def getVersionComment(checkInDest,asset_version):
 # for rollback
     return
-def getVersionComment(checkInDest,asset_version)
-# for rollback
-    return
-def discard()
+def discard():
 # for rollback 
     return
-def tempSetVersion(toCheckout, latestVersion)
+def tempSetVersion(toCheckout, latestVersion):
 #for rollback
     return
 def getVersionedFolderInfo(self):
@@ -93,10 +116,11 @@ def getVersionedFolderInfo(self):
 def canCheckin(filePath):
     print "In facade canCheckin ", filePath
     # This will check if a user can check in a particular file.
-    
+    # TODO: How is this different from checkoutOutByMe??
     return checkinDAO.canCheckin(filePath)
 
 def checkin(asset, comment, toInstall):
+
     # This will checkin the asset and free it for others to checkout.
     checkinDest = checkinDAO.checkin(asset, comment)
 
