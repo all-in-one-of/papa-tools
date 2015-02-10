@@ -71,6 +71,11 @@
             "python_file":"alembic_exporter.py"
         },
         {
+            "icon":"alembic_exporter.xpm",
+            "annotation":"(NEW) Export loaded references to alembic",
+            "python_file":"alembic_exporter_new.py"
+        },
+        {
             "icon":"cam.xpm",
             "annotation":"Make a playblast of your previs or animation file.",
             "python_file":"maya_playblast.py"
