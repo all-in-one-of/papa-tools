@@ -3,6 +3,7 @@ import asset_manager.DAOs.newItemDAO as newItem
 import asset_manager.DAOs.checkoutDAO as checkoutDAO
 import asset_manager.DAOs.checkinDAO as checkinDAO
 import asset_manager.DAOs.rollbackDAO as rollbackDAO
+import asset_manager.DAOs.alembicDAO as alembicDAO
 from _xmlplus.dom.javadom import Text
 
 def getAssetPath(self, assetName, location):
@@ -126,3 +127,8 @@ def checkin(asset, comment, toInstall):
 
     # Then in here we'll update the install files, as well.
     checkinDAO.installFiles(toInstall, checkinDest)
+
+
+def build_alembic_filepath(self, refPath, filePath):
+    # This will build the Alembic command that Maya will call to export Alembic.
+    return alembicDAO.build_alembic_filepath(self, refPath, filePath)
