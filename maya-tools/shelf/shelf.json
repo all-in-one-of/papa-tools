@@ -89,6 +89,11 @@
             "icon":"delete.xpm",
             "annotation":"Rename or Delete shots or Copy animation to previs",
             "python_file":"maya_edit_shot.py"
+        },
+        {
+            "icon":"delete.xpm",
+            "annotation":"Rename or Delete shots or Copy animation to previs",
+            "python_file":"maya_edit_shot_new.py"
         }
     ]
 }

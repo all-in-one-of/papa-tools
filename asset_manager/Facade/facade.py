@@ -4,6 +4,7 @@ import asset_manager.DAOs.checkoutDAO as checkoutDAO
 import asset_manager.DAOs.checkinDAO as checkinDAO
 import asset_manager.DAOs.rollbackDAO as rollbackDAO
 import asset_manager.DAOs.alembicDAO as alembicDAO
+import asset_manager.DAOs.editShotDAO as editShotDAO
 from _xmlplus.dom.javadom import Text
 
 def getAssetPath(self, assetName, location):
@@ -41,24 +42,24 @@ def getVersions(self, origFileName):
     """
     return rollbackDAO.getVersions(self, origFileName)
 
-# The checkout method works for both shots and assets currently, at least in Maya... do we need checkoutShot and checkoutAsset here?
-def checkoutShot(self, shot, user):
-# check out the indicated shot for the given user
-    return
+# # The checkout method works for both shots and assets currently, at least in Maya... do we need checkoutShot and checkoutAsset here?
+# def checkoutShot(self, shot, user):
+# # check out the indicated shot for the given user
+#     return
 
-def checkoutAsset(self, asset, user):
-# check out the indicated asset for the given user
-    return
+# def checkoutAsset(self, asset, user):
+# # check out the indicated asset for the given user
+#     return
 
-def addAsset(self, asset):
-# add an asset
-    return
+# def addAsset(self, asset):
+# # add an asset
+#     return
 
-def createNewPrevisFolder(self):
-    return
+# def createNewPrevisFolder(self):
+#     return
 
-def createNewShotFolder(self):
-    return
+# def createNewShotFolder(self):
+#     return
 
 def isLocked(self, toUnlock):
 # check if scene is LOCKED
@@ -129,6 +130,34 @@ def checkin(asset, comment, toInstall):
     checkinDAO.installFiles(toInstall, checkinDest)
 
 
+def removeFolder(currentlySelected, context):
+    # Removes the folder of the shot. (For deleting shots.)
+    editShotDAO.removeFolder(currentlySelected, context)
+
+def isShotCheckedOut(currentlySelected, currentIndex):
+    # Checks to see if a shot can be renamed.
+    return editShotDAO.isShotCheckedOut(currentlySelected, currentIndex)
+
+def isNameTaken(currentIndex, newName):
+    # Checks to see if a name is already taken.
+    return editShotDAO.isNameTaken(currentIndex, newName)
+
+def renameShot(currentIndex, currentlySelected, newName):
+    editShotDAO.renameShot(currentIndex, currentlySelected, newName)
+
+def previsToAnim(name):
+    return editShotDAO.previsToAnim(name)
+
+def checkCloneShots(src_name, dst_name, currentIndex):
+    return editShotDAO.checkCloneShots(src_name, dst_name, currentIndex)
+
+def cloneShot(src_name, dst_name, currentIndex):
+    return editShotDAO.cloneShot(src_name, dst_name, currentIndex)
+
+
+# ----------------------------------------------  ALEMBIC METHODS  ----------------------------------------------
+
 def build_alembic_filepath(self, refPath, filePath):
     # This will build the Alembic command that Maya will call to export Alembic.
     return alembicDAO.build_alembic_filepath(self, refPath, filePath)
+
