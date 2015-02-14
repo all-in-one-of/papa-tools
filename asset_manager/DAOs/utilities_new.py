@@ -120,7 +120,7 @@ def createNewPrevisFolders(parent, name):
 		raise Exception("Shot folders must be created in "+os.environ['PREVIS_DIR'])
 	
 	new_dir = os.path.join(parent, name)
-	print 'creating :'+new_dir
+	print 'creating :' + new_dir
 	addProjectFolder(parent, name)
 	addVersionedFolder(new_dir, 'animation', -1)
 	addVersionedFolder(new_dir, 'compositing', 5)
@@ -152,7 +152,7 @@ def canRename(assetDirPath, newName='__null_asset_path'):
 		return True
 	return False
 
-def renameFolder(oldDir, newName):
+def renameFolder(oldDir, newName): # Currently only used for renaming a shot in Maya.
 	head, tail = os.path.split(oldDir)
 	dest = os.path.join(head, newName)
 	if os.path.exists(dest):
