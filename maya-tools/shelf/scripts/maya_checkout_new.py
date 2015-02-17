@@ -167,10 +167,6 @@ class CheckoutDialog(QDialog):
 			self.context.add_item(text)
 			self.refresh()
 		return
-	
-	# TODO: Is this something we want to remove or not?
-	def get_filename(self, parentdir):
-		return os.path.basename(os.path.dirname(parentdir))+'_'+os.path.basename(parentdir)
 
 	# TODO: Clean this up so it is not used anymore.
 	def get_asset_path(self):
@@ -249,7 +245,7 @@ class CheckoutDialog(QDialog):
 				filePath = facade.getCheckoutDest(self, itemToCheckout, self.context.name)
 
 		# Adding the file path together so we can open the file.
-		userFilePath = facade.getFilename(self, filePath, itemToCheckout, self.context.name)
+		userFilePath = facade.getFilepath(self, filePath, itemToCheckout, self.context.name)
 		toOpen = userFilePath + ".mb"
 		print "maya filePath", toOpen
 

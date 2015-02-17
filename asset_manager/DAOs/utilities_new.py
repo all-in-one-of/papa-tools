@@ -309,6 +309,9 @@ def setVersion(dirPath, version):
     shutil.rmtree(dirPath)
     #os.remove(os.path.join(newVersionPath, ".checkoutInfo"))
 
+def get_filename(parentdir):
+    return os.path.basename(os.path.dirname(parentdir))+'_'+os.path.basename(parentdir)
+
 #################################################################################
 # Checkout
 #################################################################################
@@ -581,16 +584,17 @@ def checkin(toCheckin):
 
 	return chkInDest
 
-def previsToAnim(name):
-	previs_path = os.path.join(os.environ['PREVIS_DIR'], name, 'animation')
-	anim_path = os.path.join(os.environ['SHOTS_DIR'], name, 'animation')
-	print previs_path
-	print anim_path
-	#no such animation file exists!
-	if not os.path.exists(anim_path):
-		createNewShotFolders(os.environ['SHOTS_DIR'], name)
+# def previsToAnim(name):
+# 	previs_path = os.path.join(os.environ['PREVIS_DIR'], name, 'animation')
+# 	anim_path = os.path.join(os.environ['SHOTS_DIR'], name, 'animation')
+# 	print previs_path
+# 	print anim_path
+# 	#no such animation file exists!
+# 	if not os.path.exists(anim_path):
+# 		createNewShotFolders(os.environ['SHOTS_DIR'], name)
 
-	return cloneShot(previs_path, name, anim_path, name)
+# 	return cloneShot(previs_path, name, anim_path, name)
+	
 	# previs_cfg = ConfigParser()
 	# anim_cfg = ConfigParser()
 	# previs_cfg.read(os.path.join(previs_path, ".nodeInfo"))
@@ -619,39 +623,39 @@ def previsToAnim(name):
 	# anim_cfg.set("Comments", 'v' + "%03d" % (anim_version+1,), commentLine)	
 	# _writeConfigFile(os.path.join(anim_path, ".nodeInfo"), anim_cfg)
 	# return True
-"""
-src and dst must be valid filepaths to a previs or animation shot folder
-src_name and dst_name are the shot names that correspond to the filepaths
-"""
-def cloneShot(src, src_name, dst, dst_name):
-	src_cfg = ConfigParser()
-	dst_cfg = ConfigParser()
-	src_cfg.read(os.path.join(src, ".nodeInfo"))
-	src_version = src_cfg.getint("Versioning", "latestversion")
-	dst_cfg.read(os.path.join(dst, ".nodeInfo"))
-	dst_version = dst_cfg.getint("Versioning", "latestversion")
-	if dst_cfg.getboolean("Versioning", "locked"):
-		return False
-	src_path = os.path.join(src, "src", 'v'+"%03d" % src_version)
-	src_filepath = os.path.join(src_path, src_name+'_animation.mb')
-	print dst_version
-	dst_path = os.path.join(dst, "src", 'v'+"%03d" % (dst_version+1))
-	os.mkdir(dst_path)
-	dst_filepath = os.path.join(dst_path, dst_name+'_animation.mb')
-	print 'copying '+src_filepath+' to '+dst_filepath
-	shutil.copyfile(src_filepath, dst_filepath)
+# """
+# src and dst must be valid filepaths to a previs or animation shot folder
+# src_name and dst_name are the shot names that correspond to the filepaths
+# """
+# def cloneShot(src, src_name, dst, dst_name):
+# 	src_cfg = ConfigParser()
+# 	dst_cfg = ConfigParser()
+# 	src_cfg.read(os.path.join(src, ".nodeInfo"))
+# 	src_version = src_cfg.getint("Versioning", "latestversion")
+# 	dst_cfg.read(os.path.join(dst, ".nodeInfo"))
+# 	dst_version = dst_cfg.getint("Versioning", "latestversion")
+# 	if dst_cfg.getboolean("Versioning", "locked"):
+# 		return False
+# 	src_path = os.path.join(src, "src", 'v'+"%03d" % src_version)
+# 	src_filepath = os.path.join(src_path, src_name+'_animation.mb')
+# 	print dst_version
+# 	dst_path = os.path.join(dst, "src", 'v'+"%03d" % (dst_version+1))
+# 	os.mkdir(dst_path)
+# 	dst_filepath = os.path.join(dst_path, dst_name+'_animation.mb')
+# 	print 'copying '+src_filepath+' to '+dst_filepath
+# 	shutil.copyfile(src_filepath, dst_filepath)
 
-	#write out new animation info
-	timestamp = time.strftime("%a, %d %b %Y %I:%M:%S %p", time.localtime())
-	user = getUsername()
-	comment = 'copied from '+src_name
-	dst_cfg.set("Versioning", "lastcheckintime", timestamp)
-	dst_cfg.set("Versioning", "lastcheckinuser", user)
-	dst_cfg.set("Versioning", "latestversion", str(dst_version+1))
-	commentLine = user + ': ' + timestamp + ': ' + '"' + comment + '"' 
-	dst_cfg.set("Comments", 'v' + "%03d" % (dst_version+1,), commentLine)	
-	_writeConfigFile(os.path.join(dst, ".nodeInfo"), dst_cfg)
-	return True
+# 	#write out new animation info
+# 	timestamp = time.strftime("%a, %d %b %Y %I:%M:%S %p", time.localtime())
+# 	user = getUsername()
+# 	comment = 'copied from '+src_name
+# 	dst_cfg.set("Versioning", "lastcheckintime", timestamp)
+# 	dst_cfg.set("Versioning", "lastcheckinuser", user)
+# 	dst_cfg.set("Versioning", "latestversion", str(dst_version+1))
+# 	commentLine = user + ': ' + timestamp + ': ' + '"' + comment + '"' 
+# 	dst_cfg.set("Comments", 'v' + "%03d" % (dst_version+1,), commentLine)	
+# 	_writeConfigFile(os.path.join(dst, ".nodeInfo"), dst_cfg)
+# 	return True
 
 ################################################################################
 # Install

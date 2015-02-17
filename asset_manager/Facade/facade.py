@@ -5,6 +5,7 @@ import asset_manager.DAOs.checkinDAO as checkinDAO
 import asset_manager.DAOs.rollbackDAO as rollbackDAO
 import asset_manager.DAOs.alembicDAO as alembicDAO
 import asset_manager.DAOs.editShotDAO as editShotDAO
+import asset_manager.DAOs.discardDAO as discardDAO
 from _xmlplus.dom.javadom import Text
 
 def getAssetPath(self, assetName, location):
@@ -79,7 +80,6 @@ def checkout(self, toCheckout, lock, location):
     
     print "facade filePath ", filePath
     return filePath
-    # return checkoutDAO.checkout(coPath, lock)
 
 def checkedOutByMe(self, itemToCheckout, location):
     # Checks if this item is checked out by the user.
@@ -91,27 +91,52 @@ def getCheckoutDest(self, itemToCheckout, location):
     coPath = getAssetPath(self, itemToCheckout, location)
     return checkoutDAO.getCheckoutDest(coPath)
 
-def getFilename(self, filePath, itemToCheckout, location):
+def getCheckinDest(self, originalFileName):
+    
+    return rollbackDAO.getCheckinDest(originalFileName)
+
+def getFilepath(self, filePath, itemToCheckout, location):
     # Gets the filename of the item. Needs to combine some stuff. I guess we could call this in the checkoutDAO...?
     coPath = getAssetPath(self, itemToCheckout, location)
     return checkoutDAO.getFilename(filePath, coPath)
 
-def getCheckinDest(filePath):
-# for rollback 
-    return
+def getAssetVersions(originalFileName):
+    return rollbackDAO.getAssetVersions(originalFileName)
 
-def tempSetVersion(toCheckout, version):
+def tempSetVersion(originalFileName, version):
  # for rollback
-    return
-def getVersionComment(checkInDest,asset_version):
-# for rollback
-    return
-def discard():
-# for rollback 
-    return
-def tempSetVersion(toCheckout, latestVersion):
-#for rollback
-    return
+    return rollbackDAO.tempSetVersion(originalFileName, version)
+
+def getAssetType(originalFileName):
+    # Gets the asset's type back. This is necessary for buttons that don't have menus representing the different assets.
+    return rollbackDAO.getAssetType(originalFileName)
+
+def getAssetName(filePath):
+    # Gets the name of the asset/shot to work with.
+    return rollbackDAO.getAssetName(filePath)
+
+def getVersionComment(assetVersion, originalFileName):
+    # Returns the comment associated with that version.
+    return rollbackDAO.getVersionComment(assetVersion, originalFileName)
+
+def rollback(self, originalFileName, assetName, assetType, destPath):
+    # Rollbacks the asset/shot to the desired place.
+    # Returns the location of the file to open up.
+
+    # I'd rather not have these in here, but this will have to do for now.
+    correctCheckoutDir = getCheckoutDest(self, assetName, assetType) # Problem: this calls it twice, but the path will change beause it checks out after this.
+
+    return rollbackDAO.rollback(originalFileName, destPath, correctCheckoutDir)
+
+
+def isCheckedOutByMe(filePath): # Aaargh. This is almost the same thing as checkedOutByMe (this one checks the .checkout file). TODO: Fix this.
+    return discardDAO.isCheckedOutByMe(filePath)
+
+def discard(filePath):
+    print "discard filePath: ", filePath
+
+    return discardDAO.discard(filePath)
+
 def getVersionedFolderInfo(self):
     return
     

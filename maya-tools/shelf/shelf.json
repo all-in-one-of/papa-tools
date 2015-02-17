@@ -36,6 +36,11 @@
             "python_file":"maya_discard.py"
         },
         {
+            "icon":"Trash.xpm",
+            "annotation":"Discard changes and release asset",
+            "python_file":"maya_discard_new.py"
+        },
+        {
             "icon":"roll.xpm",
             "annotation":"Roll back to an older version",
             "python_file":"maya_rollback.py"
@@ -79,6 +84,11 @@
             "icon":"cam.xpm",
             "annotation":"Make a playblast of your previs or animation file.",
             "python_file":"maya_playblast.py"
+        },
+        {
+            "icon":"cam.xpm",
+            "annotation":"Make a playblast of your previs or animation file.",
+            "python_file":"maya_playblast_new.py"
         },
         {
 		"icon":"garrett.xpm",
