@@ -43,3 +43,9 @@ def getItems(self, folder):
     tree.sortItems(0)
     tree.setSortingEnabled(True)
     return tree
+
+def getAssetName(filePath):
+    # Precondition: filePath is a valid path to a asset currently checked out.
+    # Returns the name of the asset split from the path.
+    checkInDest = amu.getCheckinDest(filePath)
+    return os.path.basename(checkinDest)
