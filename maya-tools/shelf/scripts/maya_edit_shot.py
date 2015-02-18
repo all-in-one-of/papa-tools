@@ -8,6 +8,7 @@ import sip
 import os, glob
 import shutil
 import utilities as amu
+import Facade.facade as facade
 
 CHECKOUT_WINDOW_WIDTH = 340
 CHECKOUT_WINDOW_HEIGHT = 575
@@ -17,46 +18,37 @@ def maya_main_window():
     return sip.wrapinstance(long(ptr), QObject)
 
 class CheckoutContext:
-    def __init__(self, parent, name, folder, asset_folder, can_edit):
-        # name of this checkout context (i.e. Model, Rig, Animation)
+    # def __init__(self, parent, name, folder, asset_folder, can_edit):
+    def __init__(self, parent, name, can_edit):
+        # name of this checkout context (i.e. Previs or Animation for this widget)
         self.name = name
-        # pathname to folder location (same as os.environ variable)
-        self.folder = folder
-        # folder location for the actual scene file to checkout
-        self.asset_folder = asset_folder;
         # enable a New/Create button for this context
         self.can_edit = can_edit
         # intialize self.tree (the widget)
         self.get_items(parent)
         # no filtering, to start out with
         self.cur_filter = ''
-        # clone shot state
+        # clone shot state. used as an intermediate step in cloning so other buttons are disabled.
         self.clone_state = False
 
     def get_items(self, parent):
-        # creates a QTreeWidget with the items to checkout
-        self.tree = QListWidget()
-        #self.tree.setColumnCount(1)
-        self.tree.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
-        folders = glob.glob(os.path.join(self.folder, '*'))
-        for f in folders:
-            bname = os.path.basename(f)
-            item = QListWidgetItem(bname)
-            item.setText(bname)
-            self.tree.addItem(item)
-        self.tree.sortItems(0)
-        self.tree.setSortingEnabled(True)
-        # bind selection handler
+        # Get the items for the widget.
+        if(self.name == "Previs"):
+            self.tree = facade.getPrevis()
+        if(self.name == "Animation"):
+            self.tree = facade.getShots()
+
+        # Then we need to bind the selection handler
         self.tree.currentItemChanged.connect(parent.set_current_item)
 
     def add_item(self, name):
-        # adds an item to the tree, with the given folder basename
+        # adds an item to the tree, with the name of the asset (currently the given folder basename)
         item = QListWidgetItem(name)
         item.setText(name)
         self.tree.addItem(item)
 
     def take_item(self, index):
-	self.tree.takeItem(index);
+        self.tree.takeItem(index);
 
     def search(self, key):
         # cache the old search key, so we don't perform unnecessary re-filtering
@@ -86,8 +78,8 @@ class EditShotDialog(QDialog):
     def __init__(self, parent=maya_main_window()):
         #Setup the different checkout contexts
         self.contexts = [
-            CheckoutContext(self, 'Animation', os.environ['SHOTS_DIR'], 'animation', False),
-            CheckoutContext(self, 'Previs', os.environ['PREVIS_DIR'], 'animation', True)
+            CheckoutContext(self, 'Animation', False),
+            CheckoutContext(self, 'Previs', True)
         ]
 
         #Initialize the GUI
@@ -190,6 +182,7 @@ class EditShotDialog(QDialog):
         else:
             self.instruction_label.clear()
 
+    # I don't think this is being used right now.
     def copy_template_animation(self, shot_name):
         template = os.path.join(os.environ['SHOTS_DIR'], 'static/animation/stable/static_animation_stable.mb')
         if(os.path.exists(template)):
@@ -197,14 +190,11 @@ class EditShotDialog(QDialog):
             shutil.copyfile(template, dest)
             print 'copied '+template+' to '+dest
         return
-    
-    def get_filename(self, parentdir):
-        return os.path.basename(os.path.dirname(parentdir))+'_'+os.path.basename(parentdir)
 
     def get_asset_path(self):
         # returns the path for a single asset
         asset_name = str(self.current_item.text())
-        return os.path.join(self.context.folder, asset_name, self.context.asset_folder)
+        return facade.getAssetPath(asset_name, self.context.name)
     
     def showErrorDialog(self, message):
         return cmd.confirmDialog(title    = 'Error!'
@@ -253,166 +243,118 @@ class EditShotDialog(QDialog):
         self.asset_info_label.setText(checkout_str+checkin_str)
     
     def delete(self):
-        print 'The delete function is not complete yet!'
-	if not (self.current_item is None):
-		currentlySelected = self.current_item.text();
-		print 'currentlySelected:' + currentlySelected;
-		password = cmd.promptDialog(
-			    title='Delete password check',
-			    message='Enter password:',
-			    button=['OK','Cancel'],
-			    defaultButton='OK',
-			    dismissString='Cancel',
-			sf = False);
-		if password == 'OK':
-			if (cmd.promptDialog(query=True, text=True) == 'd3l3t3p@ssw0rd'):
-				newMessage = str('Are you sure you want to delete <' + currentlySelected + '> ?');
-				confirm = cmd.confirmDialog(
-					title='Confirm delete',
-					message=newMessage,
-					button=['Yes', 'No'],
-					defaultButton='Yes',
-					cancelButton='No',
-					dismissString='No')
-				if (confirm == 'Yes'):
-					currentlySelected = self.current_item.text();
-					print 'currentlySelected:' + currentlySelected;
-					dirPath = '';
-					if self.context_tabs.currentIndex() == 1:
-						dirPath = amu.getProductionDir() + '/previs/' + currentlySelected;
-					else:
-						dirPath = amu.getProductionDir() + '/shots/' + currentlySelected;
-					amu.removeFolder(str(dirPath));
+        # Deletes the selected shot.
+        if not (self.current_item is None):
+            currentlySelected = self.current_item.text();
+            print 'currentlySelected:' + currentlySelected;
+            password = cmd.promptDialog(
+                    title='Delete password check',
+                    message='Enter password:',
+                    button=['OK','Cancel'],
+                    defaultButton='OK',
+                    dismissString='Cancel',
+                sf = False);
+            if password == 'OK':
+                if (cmd.promptDialog(query=True, text=True) == 'd3l3t3p@ssw0rd'):
+                    newMessage = str('Are you sure you want to delete <' + currentlySelected + '> ?');
+                    confirm = cmd.confirmDialog(
+                        title='Confirm delete',
+                        message=newMessage,
+                        button=['Yes', 'No'],
+                        defaultButton='Yes',
+                        cancelButton='No',
+                        dismissString='No')
+                    if (confirm == 'Yes'):
+                        # Remove the shot
+                        currentlySelected = self.current_item.text()
+                        print 'currentlySelected:' + currentlySelected
+                        dirPath = ''
+                        facade.removeFolder(currentlySelected, self.context_tabs.currentIndex())
 
-					# refresh context
-					tempContext = self.contexts[self.context_tabs.currentIndex()];
-					tempContext.take_item(tempContext.tree.currentRow());
-			else:
-				newMessage = str('Wrong password. Did not delete shot <' + currentlySelected + '>');
-				cmd.confirmDialog(
-					title='Cancelled delete',
-					message=newMessage,
-					button=['Yes'],
-					defaultButton='Yes',
-					cancelButton='Yes',
-					dismissString='Yes')
+                        # And refresh context
+                        tempContext = self.contexts[self.context_tabs.currentIndex()]
+                        tempContext.take_item(tempContext.tree.currentRow())
+                else:
+                    newMessage = str('Wrong password. Did not delete shot <' + currentlySelected + '>');
+                    cmd.confirmDialog(
+                        title='Cancelled delete',
+                        message=newMessage,
+                        button=['Yes'],
+                        defaultButton='Yes',
+                        cancelButton='Yes',
+                        dismissString='Yes')
     
     def rename(self):
-        print 'The rename function is not complete yet!';
-	if not (self.current_item is None):
-		currentlySelected = self.current_item.text()
-		print 'currentlySelected:' + currentlySelected;
-		dirPath = '';
-		if self.context_tabs.currentIndex() == 1:
-			dirPath = amu.getProductionDir() + '/previs/';
-		else:
-			dirPath = amu.getProductionDir() + '/shots/';
+        # Renames the selected shot.
+        if not (self.current_item is None):
+            currentlySelected = self.current_item.text()
+            if facade.isShotCheckedOut(currentlySelected, self.context_tabs.currentIndex()):
+                password = cmd.promptDialog(
+                        title='Rename password check',
+                        message='Enter password:',
+                        button=['OK','Cancel'],
+                        defaultButton='OK',
+                        dismissString='Cancel',
+                    sf = False);
+                if password == 'OK':
+                    if (cmd.promptDialog(query=True, text=True) == 'r3n@m3p@ssw0rd'):
+                        confirm = cmd.promptDialog(
+                                title='Rename',
+                                message='What would you like to rename the file?',
+                                button=['OK','Cancel'],
+                                defaultButton='OK',
+                                dismissString='Cancel',
+                            sf = False);
+                        if confirm == 'OK':
+                            newName = cmd.promptDialog(query=True, text=True);
+                            print newName;
+                            
+                            if not facade.isNameTaken(self.context_tabs.currentIndex(), newName):
+                                # Then we rename the shot.
+                                facade.renameShot(self.context_tabs.currentIndex(), currentlySelected, newName)
 
-		coPath = dirPath + currentlySelected + '/animation';
-		coPath = str(coPath);
-		print 'coPath: ' + coPath;
-		if not amu.isVersionedFolder(coPath):
-			raise Exception("Not a versioned folder.");
+                                # refresh context, remove previously-named item and add new item.
+                                tempContext = self.contexts[self.context_tabs.currentIndex()];
+                                tempContext.take_item(tempContext.tree.currentRow());
+                                tempContext.add_item(newName);
+                            else:
+                                newMessage = str('The name <' + newName + '> is already taken. Did not rename.');
+                                cmd.confirmDialog(
+                                    title='Cancelled rename',
+                                    message=newMessage,
+                                    button=['Yes'],
+                                    defaultButton='Yes',
+                                    cancelButton='Yes',
+                                    dismissString='Yes')
+                        else:
+                            return;
+                    else:
+                        newMessage = str('Wrong password. Did not rename shot <' + currentlySelected + '>');
+                        cmd.confirmDialog(
+                            title='Cancelled rename',
+                            message=newMessage,
+                            button=['Yes'],
+                            defaultButton='Yes',
+                            cancelButton='Yes',
+                            dismissString='Yes')
+            else:
+                newMessage = str('Part is currently checked out. Did not rename shot <' + currentlySelected + '>');
+                cmd.confirmDialog(
+                    title='Cancelled rename',
+                    message=newMessage,
+                    button=['Yes'],
+                    defaultButton='Yes',
+                    cancelButton='Yes',
+                    dismissString='Yes')
 
-		nodeInfo = ConfigParser();
-		nodeInfo.read(os.path.join(coPath, ".nodeInfo"));
-		if nodeInfo.get("Versioning", "locked") == "False":
-			password = cmd.promptDialog(
-				    title='Rename password check',
-				    message='Enter password:',
-				    button=['OK','Cancel'],
-				    defaultButton='OK',
-				    dismissString='Cancel',
-				sf = False);
-			if password == 'OK':
-				if (cmd.promptDialog(query=True, text=True) == 'r3n@m3p@ssw0rd'):
-					confirm = cmd.promptDialog(
-						    title='Rename',
-						    message='What would you like to rename the file?',
-						    button=['OK','Cancel'],
-						    defaultButton='OK',
-						    dismissString='Cancel',
-						sf = False);
-					if confirm == 'OK':
-						newName = cmd.promptDialog(query=True, text=True);
-						print newName;
-						
-
-						#check if the newName is already used by another shot
-						newNameTaken = False;
-						shots = os.listdir(dirPath);
-						for s in shots:
-							print 'shot: ' + s;
-							if (s == newName):
-								newNameTaken = True;
-								print 'Name <' + s + '> is already taken';
-						if not newNameTaken:
-							dirPath = dirPath + currentlySelected;
-					
-							#check /animation folder
-							animDirPath = str(dirPath + '/animation');
-							if amu.canRename(animDirPath):
-								print 'anim rename';
-								''' The renameVersionedFiles() method only searches for *.mb files.
-								If other types of files need to be changed, just copy the code from
-								the renameVersionedFiles() method in asset_manager/utilities.py and
-								change the file extension from *.mb to whatever files type you need.'''
-								renameFiles(self, animDirPath, currentlySelected, newName);
-
-							#check /compositing folder
-							compDirPath = str(dirPath + '/compositing');
-							if amu.canRename(compDirPath):
-								print 'comp rename';
-								renameFiles(self, compDirPath, currentlySelected, newName);
-
-							#check /lighting folder
-							lightDirPath = str(dirPath + '/lighting');
-							if amu.canRename(lightDirPath):
-								print 'lighting rename' ;
-								renameFiles(self, lightDirPath, currentlySelected, newName);
-							print 'dirPath: ' + dirPath;
-							amu.renameFolder(str(dirPath), newName);
-
-							# refresh context
-							tempContext = self.contexts[self.context_tabs.currentIndex()];
-							tempContext.take_item(tempContext.tree.currentRow());
-							tempContext.add_item(newName);
-						else:
-							newMessage = str('The name <' + newName + '> is already taken. Did not rename.');
-							cmd.confirmDialog(
-								title='Cancelled rename',
-								message=newMessage,
-								button=['Yes'],
-								defaultButton='Yes',
-								cancelButton='Yes',
-								dismissString='Yes')
-					else:
-						return;
-				else:
-					newMessage = str('Wrong password. Did not rename shot <' + currentlySelected + '>');
-					cmd.confirmDialog(
-						title='Cancelled rename',
-						message=newMessage,
-						button=['Yes'],
-						defaultButton='Yes',
-						cancelButton='Yes',
-						dismissString='Yes')
-		else:
-			newMessage = str('Part is currently checked out. Did not rename shot <' + currentlySelected + '>');
-			cmd.confirmDialog(
-				title='Cancelled rename',
-				message=newMessage,
-				button=['Yes'],
-				defaultButton='Yes',
-				cancelButton='Yes',
-				dismissString='Yes')
+       
 
     def copy(self):
         name = str(self.current_item.text())
         if not name:
            # self.showErrorDialog('select a shot!')
             return
-        if not amu.previsToAnim(name):
+        if not facade.previsToAnim(name):
             self.showErrorDialog("This shot is currently checked out! It must be unlocked before it can be changed.")
             return
         self.close_dialog()
@@ -422,12 +364,6 @@ class EditShotDialog(QDialog):
         if not self.context.clone_state:
             #select source
             self.src_name = str(self.current_item.text())
-            if not self.src_name:
-                return
-            if self.context_tabs.currentIndex() == 1:
-                self.src = os.path.join(os.environ['PREVIS_DIR'], self.src_name, 'animation')
-            else:
-                self.src = os.path.join(os.environ['SHOTS_DIR'], self.src_name, 'animation')
             self.contexts[0].clone_state = True
             self.contexts[1].clone_state = True
             self.refresh()
@@ -436,37 +372,24 @@ class EditShotDialog(QDialog):
             self.contexts[0].clone_state = False
             self.contexts[1].clone_state = False
             dst_name = str(self.current_item.text())
-            if not dst_name:
-                return
-            if self.context_tabs.currentIndex() == 1:
-                dst = os.path.join(os.environ['PREVIS_DIR'], dst_name, 'animation')
-            else:
-                dst = os.path.join(os.environ['SHOTS_DIR'], dst_name, 'animation')
 
-            valid_paths = os.path.exists(self.src) and os.path.exists(dst)
-            if not valid_paths:
-                self.showErrorDialog('invalid shot name')
-            if self.src == dst:
-                self.showErrorDialog('copying '+self.src+' to '+dst+' would be redundant.')
+            if self.src_name == dst_name:
+                self.showErrorDialog('D\'oh! Copying ' + self.src_name + ' to ' + dst_name + ' would be redundant.')
                 self.refresh()
                 return
 
-            #clone
-            if not amu.cloneShot(self.src, self.src_name, dst, dst_name):
+            if not (facade.checkCloneShots(self.src_name, dst_name, self.context_tabs.currentIndex())):
+                self.showErrorDialog('Sorry, invalid shot name.')
+                self.refresh()
+                return
+
+            # Clone the shot.
+            if not facade.cloneShot(self.src_name, dst_name, self.context_tabs.currentIndex()):
                 self.showErrorDialog("This shot is currently checked out! It must be unlocked before it can be changed.")
                 self.refresh()
                 return
             self.close_dialog()
             self.showSuccessDialog("shot "+self.src_name+" was successfully copied to "+dst_name+"!")
-
-def renameFiles(self, vDirPath, oldName, newName):
-	src = glob.glob(os.path.join(vDirPath, 'src', '*', '*.*'))
-	stable = glob.glob(os.path.join(vDirPath, 'stable', '*', '*.*'))
-	stable = stable+glob.glob(os.path.join(vDirPath, 'stable', '*.*'))
-	for s in src+stable:
-		head, tail = os.path.split(s)
-		dest = os.path.join(head, newName+tail.split(oldName)[1])
-		os.renames(s, dest)
         
 def go():
     dialog = EditShotDialog()

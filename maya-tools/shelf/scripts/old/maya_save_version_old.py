@@ -1,24 +1,19 @@
 import maya.cmds as cmds
 import os
 import utilities as amu
-import maya_checkout_new as maya_checkout # This isn't used... probably because the checkout module needs context, and this doesn't have it.
-import maya_checkin_new as maya_checkin
-import Facade.facade as facade
+import maya_checkout
+import maya_checkin
 
 def go():
     filePath = cmds.file(q=True, sceneName=True)
-    # Need to grab the asset name and asset type so we can check it out later on.
-    assetType = facade.getAssetType(filePath)
-    assetName = facade.getAssetName(filePath)
-    # print "assetType: ", assetType
-    # print "assetName: ", assetName
+    toCheckin = os.path.join(amu.getUserCheckoutDir(), os.path.basename(os.path.dirname(filePath)))
+    toCheckout = amu.getCheckinDest(toCheckin) 
     maya_checkin.checkin()
-
     try:
-        destpath = facade.checkout(assetName, True, assetType)
+        destpath = amu.checkout(toCheckout, True)
     except Exception as e:
         print str(e)
-        if not facade.checkedOutByMe(assetName, assetType):
+        if not amu.checkedOutByMe(toCheckout):
             cmd.confirmDialog(  title          = 'Can Not Checkout'
                                , message       = str(e)
                                , button        = ['Ok']
@@ -27,10 +22,8 @@ def go():
                                , dismissString = 'Ok')
             return
         else:
-            destpath = facade.getCheckoutDest(assetName, assetType)
-
-    filename = facade.getFilepath(destpath, assetName, assetType)
-    filename = filename + ".mb"
+            destpath = amu.getCheckoutDest(toCheckout)
+    filename = os.path.basename(os.path.dirname(toCheckout))+'_'+os.path.basename(toCheckout)+'.mb'
     toOpen = os.path.join(destpath, filename)
     # open the file
     if os.path.exists(toOpen):
