@@ -8,97 +8,76 @@ import asset_manager.DAOs.editShotDAO as editShotDAO
 import asset_manager.DAOs.discardDAO as discardDAO
 from _xmlplus.dom.javadom import Text
 
-def getAssetPath(self, assetName, location):
-    path = getItems.getAssetPath(self, assetName, location)
+def getAssetPath(assetName, location):
+    path = getItems.getAssetPath(assetName, location)
     print path
     return path
 
-def newAnimation(self, name, inputText):
+def newAnimation(name, inputText):
     # create a new getItem
     if(name == 'Previs'):
         newItem.createNewPrevisFolders(name, inputText)
     else:
         newItem.createNewShotFolders(name, inputText)
-    newItem.copyTemplateAnimation(self, inputText)
+    newItem.copyTemplateAnimation(inputText)
     return
 
-def getShots(self):
+def getShots():
     # creates a QTreeWidget with the items to return
-    tree = getItems.getShots(self)
+    tree = getItems.getShots()
     return tree
 
-def getPrevis(self):
+def getPrevis():
     # creates a QTreeWidget with the items to return
-    tree = getItems.getPrevis(self)
+    tree = getItems.getPrevis()
     return tree
 
-def getAssets(self):
+def getAssets():
     # creates a QTreeWidget with the items to checkout
-    tree = getItems.getAssets(self)
+    tree = getItems.getAssets()
     return tree
 
-def getVersions(self, origFileName):
+def getVersions(origFileName):
     """
     Returns the versions of an asset.
     """
-    return rollbackDAO.getVersions(self, origFileName)
+    return rollbackDAO.getVersions(origFileName)
 
-# # The checkout method works for both shots and assets currently, at least in Maya... do we need checkoutShot and checkoutAsset here?
-# def checkoutShot(self, shot, user):
-# # check out the indicated shot for the given user
-#     return
-
-# def checkoutAsset(self, asset, user):
-# # check out the indicated asset for the given user
-#     return
-
-# def addAsset(self, asset):
-# # add an asset
-#     return
-
-# def createNewPrevisFolder(self):
-#     return
-
-# def createNewShotFolder(self):
-#     return
-
-def isLocked(self, toUnlock):
+def isLocked(toUnlock):
 # check if scene is LOCKED
     return checkoutDAO.isLocked(toUnlock)
 
-def unlock(self, toUnlock):
+def unlock(toUnlock):
 # unlock an asset
     return checkoutDAO.unlock(toUnlock)
 
-def checkout(self, toCheckout, lock, location):
+def checkout(toCheckout, lock, location):
     # Checkout an asset or shot. 
     # Need to first grab the path in here. Not the best place, but I guess it makes sense.
-    coPath = getAssetPath(self, toCheckout, location)
+    coPath = getAssetPath(toCheckout, location)
 
     # The checkout command will return the destination of the item that is checked out.
     filePath = checkoutDAO.checkout(coPath, lock)
-    
-    print "facade filePath ", filePath
     return filePath
 
-def checkedOutByMe(self, itemToCheckout, location):
+def checkedOutByMe(itemToCheckout, location):
     # Checks if this item is checked out by the user.
-    coPath = getAssetPath(self, itemToCheckout, location)
+    coPath = getAssetPath(itemToCheckout, location)
     return checkoutDAO.checkedOutByMe(coPath)
 
-def getCheckoutDest(self, itemToCheckout, location):
+def getCheckoutDest(itemToCheckout, location):
     # get checkout destination
-    coPath = getAssetPath(self, itemToCheckout, location)
+    coPath = getAssetPath(itemToCheckout, location)
     return checkoutDAO.getCheckoutDest(coPath)
 
-def getCheckinDest(self, originalFileName):
+def getCheckinDest(originalFileName):
     
     return rollbackDAO.getCheckinDest(originalFileName)
 
-def getFilepath(self, filePath, itemToCheckout, location):
+def getFilepath(filePath, itemToCheckout, location):
     # Gets the filename of the item. Needs to combine some stuff. I guess we could call this in the checkoutDAO...?
-    coPath = getAssetPath(self, itemToCheckout, location)
-    return checkoutDAO.getFilename(filePath, coPath)
+    coPath = getAssetPath(itemToCheckout, location)
+    return checkoutDAO.getFilepath(filePath, coPath)
 
 def getAssetVersions(originalFileName):
     return rollbackDAO.getAssetVersions(originalFileName)
@@ -119,12 +98,12 @@ def getVersionComment(assetVersion, originalFileName):
     # Returns the comment associated with that version.
     return rollbackDAO.getVersionComment(assetVersion, originalFileName)
 
-def rollback(self, originalFileName, assetName, assetType, destPath):
+def rollback(originalFileName, assetName, assetType, destPath):
     # Rollbacks the asset/shot to the desired place.
     # Returns the location of the file to open up.
 
     # I'd rather not have these in here, but this will have to do for now.
-    correctCheckoutDir = getCheckoutDest(self, assetName, assetType) # Problem: this calls it twice, but the path will change beause it checks out after this.
+    correctCheckoutDir = getCheckoutDest(assetName, assetType) # Problem: this calls it twice, but the path will change beause it checks out after this.
 
     return rollbackDAO.rollback(originalFileName, destPath, correctCheckoutDir)
 
@@ -141,7 +120,6 @@ def getVersionedFolderInfo(self):
     return
     
 def canCheckin(filePath):
-    print "In facade canCheckin ", filePath
     # This will check if a user can check in a particular file.
     # TODO: How is this different from checkoutOutByMe??
     return checkinDAO.canCheckin(filePath)

@@ -51,7 +51,7 @@ def addVersionedFolder(parent, name, toKeep):
     createNodeInfoFile(new_dir, toKeep)
     return new_dir
     
-def copyTemplateAnimation(self, shotName):
+def copyTemplateAnimation(shotName):
     template = os.path.join(os.environ['SHOTS_DIR'], 'static/animation/stable/static_animation_stable.mb')
     if(os.path.exists(template)):
         dest = os.path.join(shotName, 'animation/src/v000/'+shotName+'_animation.mb')

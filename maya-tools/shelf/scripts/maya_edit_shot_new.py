@@ -34,9 +34,9 @@ class CheckoutContext:
     def get_items(self, parent):
         # Get the items for the widget.
         if(self.name == "Previs"):
-            self.tree = facade.getPrevis(self)
+            self.tree = facade.getPrevis()
         if(self.name == "Animation"):
-            self.tree = facade.getShots(self)
+            self.tree = facade.getShots()
 
         # Then we need to bind the selection handler
         self.tree.currentItemChanged.connect(parent.set_current_item)
@@ -182,7 +182,7 @@ class EditShotDialog(QDialog):
         else:
             self.instruction_label.clear()
 
-    # Move this.
+    # I don't think this is being used right now.
     def copy_template_animation(self, shot_name):
         template = os.path.join(os.environ['SHOTS_DIR'], 'static/animation/stable/static_animation_stable.mb')
         if(os.path.exists(template)):
@@ -194,7 +194,7 @@ class EditShotDialog(QDialog):
     def get_asset_path(self):
         # returns the path for a single asset
         asset_name = str(self.current_item.text())
-        return facade.getAssetPath(self, asset_name, self.context.name)
+        return facade.getAssetPath(asset_name, self.context.name)
     
     def showErrorDialog(self, message):
         return cmd.confirmDialog(title    = 'Error!'
