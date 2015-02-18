@@ -4,9 +4,10 @@ from PyQt4.QtGui import *
 import maya.cmds as cmds
 import maya.OpenMayaUI as omu
 from pymel.core import *
-import utilities as amu #asset manager utilities
+# import utilities as amu #asset manager utilities
 import os
 import sip
+import Facade.facade as facade
 
 WINDOW_WIDTH = 330
 WINDOW_HEIGHT = 300
@@ -96,14 +97,17 @@ class AlembicExportDialog(QDialog):
 		selectedItems = self.selection_list.selectedItems()
 		for item in selectedItems:
 			selectedReferences.append(item.text())
-		
+		print "Here are the references: ", selectedReferences
+
 		if self.showConfirmAlembicDialog(selectedReferences) == 'Yes':
 			loadPlugin("AbcExport")
 			for ref in selectedReferences:
-				abcFilePath = self.build_alembic_filepath(ref)
-				print abcFilePath
+				filePath = cmds.file(q=True, sceneName=True)
+				refPath = cmds.referenceQuery(unicode(ref), filename=True)
+				abcFilePath = facade.build_alembic_filepath(self, refPath, filePath) # This needs to be moved into the facade/alembic exporter.
+				print "abcFilePath", abcFilePath
 				command = self.build_alembic_command(ref, abcFilePath)
-				print command
+				print "Export Alembic command: ", command
 				Mel.eval(command)
 		
 		self.close_dialog()
@@ -120,29 +124,35 @@ class AlembicExportDialog(QDialog):
 		                         , cancelButton  = 'No'
 		                         , dismissString = 'No')
 	
-	def build_alembic_filepath(self, ref):
-		#Get Shot Directory
-		filePath = cmds.file(q=True, sceneName=True)
-		toCheckin = os.path.join(amu.getUserCheckoutDir(), os.path.basename(os.path.dirname(filePath)))
-		dest = amu.getCheckinDest(toCheckin)
+	# def build_alembic_filepath(self, ref):
+	# 	# This builds the location where the alembic file will be stored. This definitely needs to be moved.
+	# 	#Get Shot Directory
+	# 	filePath = cmds.file(q=True, sceneName=True)
+	# 	toCheckin = os.path.join(amu.getUserCheckoutDir(), os.path.basename(os.path.dirname(filePath)))
+	# 	dest = amu.getCheckinDest(toCheckin)
 		
-		#Get Asset Name
-		refPath = cmds.referenceQuery(unicode(ref), filename=True)
-		assetName = os.path.basename(refPath).split('.')[0]
+	# 	#Get Asset Name
+	# 	refPath = cmds.referenceQuery(unicode(ref), filename=True)
+	# 	assetName = os.path.basename(refPath).split('.')[0]
 		
-		return os.path.join(os.path.dirname(dest), 'animation_cache', 'abc', assetName+'.abc')
+	# 	return os.path.join(os.path.dirname(dest), 'animation_cache', 'abc', assetName+'.abc')
 
 	def build_alembic_command(self, ref, abcfilepath):
+		# First check and see if the reference has a tagged node on it.
 		tagged = self.get_tagged_node(ref)
 
 		if tagged == "":
 			return ""
 
+		# Then we get the dependencies of that item to be tagged.
 		depList = self.get_dependancies(ref)
 
+		# Not sure yet what roots_string is for. Figure out.
 		roots_string = ""
 		roots_string = " ".join([roots_string, "-root %s"%(tagged.name())])
 
+
+		# But it seems we add the dependencies to the thing being exported.
 		for dep in depList:
 			depRef = ls(dep)
 			if len(depRef) > 0:
@@ -154,25 +164,30 @@ class AlembicExportDialog(QDialog):
 
 		start_frame = cmds.playbackOptions(q=1, animationStartTime=True) - 5
 		end_frame = cmds.playbackOptions(q=1, animationEndTime=True) + 5
+
+		# Then here is the actual Alembic Export command for Mel.
 		command = 'AbcExport -j "%s -frameRange %s %s -step 0.25 -writeVisibility -nn -uv -file %s"'%(roots_string, str(start_frame), str(end_frame), abcfilepath)
 		return command
 
 	def get_tagged_node(self, ref):
+		# Looks for a tagged node that has the BYU Alembic Export flag on it.
 		refNodes = cmds.referenceQuery(unicode(ref), nodes=True)
 		rootNode = ls(refNodes[0])
 		if rootNode[0].hasAttr("BYU_Alembic_Export_Flag"):
 			taggedNode = rootNode[0]
 		else:
+			# Otherwise get the tagged node that is in the children.
 			taggedNode = self.get_tagged_children(rootNode[0])
 
 		if taggedNode == "":
 			self.showNoTagFoundDialog(unicode(ref))
 			return ""
 
-		print taggedNode
+		print "taggedNode ", taggedNode
 		return taggedNode
 
 	def get_tagged_children(self, node):
+		# Too bad this is similar to the get_tagged_node method. Maybe this could be combined...
 		for child in node.listRelatives(c=True):
 			if child.hasAttr("BYU_Alembic_Export_Flag"):
 				return child
@@ -183,6 +198,7 @@ class AlembicExportDialog(QDialog):
 		return ""
 
 	def get_dependancies(self, ref):
+		# Looks like the 
 		refNodes = cmds.referenceQuery(unicode(ref), nodes=True)
 		rootNode = ls(refNodes[0])
 		depList = self.get_dependant_children(rootNode[0])
@@ -199,7 +215,7 @@ class AlembicExportDialog(QDialog):
 			if constNS != targetNS and targetNS not in depList:
 				depList.append(targetNS + 'RN')
 
-		print depList
+		print 'depList: ', depList
 		return depList
 
 	def showNoTagFoundDialog(self, ref):
