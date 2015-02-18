@@ -86,15 +86,11 @@ class RollbackDialog(QDialog):
         self.selection_list.sortItems(0)
 
     def refresh(self):	
-        print "self.ORIGINAL_FILE_NAME ", self.ORIGINAL_FILE_NAME
         selections = facade.getAssetVersions(self.ORIGINAL_FILE_NAME)
         self.update_selection(selections)
 
     def get_checkout_mode(self):
         return ''
-
-    def get_filename(self, parentdir):
-        return os.path.basename(os.path.dirname(parentdir))+'_'+os.path.basename(parentdir) # TODO: Remove this.
 
     ########################################################################
     # SLOTS
@@ -165,14 +161,17 @@ class RollbackDialog(QDialog):
             assetType = facade.getAssetType(self.ORIGINAL_FILE_NAME)
             assetName = facade.getAssetName(self.ORIGINAL_FILE_NAME)
 
-            toCheckout = facade.getCheckinDest(self, self.ORIGINAL_FILE_NAME) # I would like to push this into the asset manager eventually.
+            print "assetType, assetName: ", assetType, assetName
+
+            toCheckout = facade.getCheckinDest(self.ORIGINAL_FILE_NAME) # I would like to push this into the asset manager eventually.
 
             latestVersion = amu.tempSetVersion(toCheckout, versionToCheckout)
+            print "latest version: ", latestVersion
             facade.discard(self.ORIGINAL_FILE_NAME) 
             try:
-                destpath = facade.checkout(self, assetName, True, assetType) 
+                destpath = facade.checkout(assetName, True, assetType) 
             except Exception as e:
-                if not facade.checkedOutByMe(self, assetName, assetType):
+                if not facade.checkedOutByMe(assetName, assetType):
                     cmd.confirmDialog(  title          = 'Can Not Checkout'
                                    , message       = str(e)
                                    , button        = ['Ok']
@@ -181,12 +180,12 @@ class RollbackDialog(QDialog):
                                    , dismissString = 'Ok')
                     return
                 else:
-                    destpath = facade.getCheckoutDest(self, assetName, assetType)
+                    destpath = facade.getCheckoutDest(assetName, assetType)
 
             amu.tempSetVersion(toCheckout, latestVersion)
             # move to correct checkout directory
-            correctCheckoutDir = facade.getCheckoutDest(self, assetName, assetType)
-            fileName = facade.rollback(self, self.ORIGINAL_FILE_NAME, assetName, assetType, destpath)
+            correctCheckoutDir = facade.getCheckoutDest(assetName, assetType)
+            fileName = facade.rollback(self.ORIGINAL_FILE_NAME, assetName, assetType, destpath)
 
             toOpen = fileName +'.mb'
             self.ORIGINAL_FILE_NAME = toOpen
@@ -197,8 +196,6 @@ class RollbackDialog(QDialog):
                 cmd.file(save=True, force=True)
             cmd.file(self.ORIGINAL_FILE_NAME, force=True, open=True)
             self.close_dialog()
-
-#Something about the filename that gets passed in is not correct. TODO: Figure out what the original tempSetVersion is passing in so we can try it.
 
     def show_version_info(self):
         asset_version = str(self.current_item.text())

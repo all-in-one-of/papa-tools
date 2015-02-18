@@ -30,13 +30,13 @@ class CheckoutContext:
 
 	def get_items(self, parent):
 		if(self.name == 'Model'):
-			self.tree = facade.getAssets(self)
+			self.tree = facade.getAssets()
 		if(self.name == 'Rig'):
-			self.tree = facade.getAssets(self)
+			self.tree = facade.getAssets()
 		if(self.name == "Previs"):
-			self.tree = facade.getPrevis(self)
+			self.tree = facade.getPrevis()
 		if(self.name == "Animation"):
-			self.tree = facade.getShots(self)
+			self.tree = facade.getShots()
 
 		# Then we need to bind the selection handler.
 		self.tree.currentItemChanged.connect(parent.set_current_item)
@@ -172,7 +172,7 @@ class CheckoutDialog(QDialog):
 	def get_asset_path(self):
 		# returns the path for a single asset
 		asset_name = str(self.current_item.text())
-		return facade.getAssetPath(self, asset_name, self.context.name)
+		return facade.getAssetPath(asset_name, self.context.name)
 
 	def showIsLockedDialog(self):
 		return cmd.confirmDialog(title = 'Already Unlocked'
@@ -203,13 +203,13 @@ class CheckoutDialog(QDialog):
 		print("Unlocking.")
 		
 		toUnlock = self.get_asset_path()
-		if facade.isLocked(self, toUnlock):
+		if facade.isLocked(toUnlock):
 			if self.showConfirmUnlockDialog() == 'No':
 				return
 			if cmd.file(q=True, sceneName=True) != "":
 				cmd.file(save=True, force=True)	
 			cmd.file(force=True, new=True) #open new file
-			facade.unlock(self, toUnlock)
+			facade.unlock(toUnlock)
 			self.showUnlockedDialog()	
 		else:
 			self.showIsLockedDialog()
@@ -230,10 +230,10 @@ class CheckoutDialog(QDialog):
 
 		itemToCheckout = str(self.current_item.text())
 		try:
-			filePath = facade.checkout(self, itemToCheckout, True, self.context.name)
+			filePath = facade.checkout(itemToCheckout, True, self.context.name)
 		except Exception as e:
 			print str(e)
-			if not facade.checkedOutByMe(self, itemToCheckout, self.context.name):
+			if not facade.checkedOutByMe(itemToCheckout, self.context.name):
 				cmd.confirmDialog(  title          = 'Can Not Checkout'
                                    , message       = str(e)
                                    , button        = ['Ok']
@@ -242,10 +242,10 @@ class CheckoutDialog(QDialog):
                                    , dismissString = 'Ok')
 				return
 			else:
-				filePath = facade.getCheckoutDest(self, itemToCheckout, self.context.name)
+				filePath = facade.getCheckoutDest(itemToCheckout, self.context.name)
 
 		# Adding the file path together so we can open the file.
-		userFilePath = facade.getFilepath(self, filePath, itemToCheckout, self.context.name)
+		userFilePath = facade.getFilepath(filePath, itemToCheckout, self.context.name)
 		toOpen = userFilePath + ".mb"
 		print "maya filePath", toOpen
 

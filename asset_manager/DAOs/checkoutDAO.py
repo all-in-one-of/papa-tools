@@ -97,7 +97,7 @@ def checkout(coPath, lock):
 	return dest
 
 
-def getFilename(userFilePath, prodFilePath):
+def getFilepath(userFilePath, prodFilePath):
 	# print "userFilePath: ", userFilePath
 	# print "prodFilePath: ", prodFilePath
 	# Builds the file path name.

@@ -39,8 +39,19 @@ def getAssetType(originalFileName):
     toCheckin = amu.getCheckinDest(filePath)
     print "toCheckout: ", toCheckin
 
+    # Need to distinguish between previs and animation. These are actually located on the third directory up, not the most recent one.
+
     assetType = os.path.basename(toCheckin).capitalize() # Prepping this for checking out.
-    return assetType
+
+    if assetType == 'Model' or assetType == 'Rig':
+        return assetType
+    else:
+        # Otherwise check if it is Previs.
+        assetType = os.path.basename(os.path.dirname(os.path.dirname(toCheckin))).capitalize()
+        if assetType == 'Previs':
+            return assetType
+        else:
+            return 'Animation'
 
 
 def getVersionComment(assetVersion, originalFileName):
