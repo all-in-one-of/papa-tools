@@ -7,6 +7,7 @@ import sip
 import os, glob
 import shutil
 import utilities as amu
+import Facade.facade as facade
 
 CHECKOUT_WINDOW_WIDTH = 340
 CHECKOUT_WINDOW_HEIGHT = 575
@@ -15,14 +16,11 @@ def maya_main_window():
 	ptr = omu.MQtUtil.mainWindow()
 	return sip.wrapinstance(long(ptr), QObject)
 
+# Checkout content is the individual setup for each possible asset to checkout.
 class CheckoutContext:
-	def __init__(self, parent, name, folder, asset_folder, can_create):
+	def __init__(self, parent, name, can_create):
 		# name of this checkout context (i.e. Model, Rig, Animation)
 		self.name = name
-		# pathname to folder location (same as os.environ variable)
-		self.folder = folder
-		# folder location for the actual scene file to checkout
-		self.asset_folder = asset_folder;
 		# enable a New/Create button for this context
 		self.can_create = can_create
 		# intialize self.tree (the widget)
@@ -31,19 +29,16 @@ class CheckoutContext:
 		self.cur_filter = ''
 
 	def get_items(self, parent):
-		# creates a QTreeWidget with the items to checkout
-		self.tree = QListWidget()
-		#self.tree.setColumnCount(1)
-		self.tree.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
-		folders = glob.glob(os.path.join(self.folder, '*'))
-		for f in folders:
-			bname = os.path.basename(f)
-			item = QListWidgetItem(bname)
-			item.setText(bname)
-			self.tree.addItem(item)
-		self.tree.sortItems(0)
-		self.tree.setSortingEnabled(True)
-		# bind selection handler
+		if(self.name == 'Model'):
+			self.tree = facade.getAssets()
+		if(self.name == 'Rig'):
+			self.tree = facade.getAssets()
+		if(self.name == "Previs"):
+			self.tree = facade.getPrevis()
+		if(self.name == "Animation"):
+			self.tree = facade.getShots()
+
+		# Then we need to bind the selection handler.
 		self.tree.currentItemChanged.connect(parent.set_current_item)
 
 	def add_item(self, name):
@@ -75,15 +70,15 @@ class CheckoutContext:
 				self.tree.setCurrentItem(None)
 		
 
-
+# CheckoutDialog is the Dialog window for the Checkout button.
 class CheckoutDialog(QDialog):
 	def __init__(self, parent=maya_main_window()):
 		#Setup the different checkout contexts
 		self.contexts = [
-			CheckoutContext(self, 'Model', os.environ['ASSETS_DIR'], 'model', False),
-			CheckoutContext(self, 'Rig', os.environ['ASSETS_DIR'], 'rig', False),
-			CheckoutContext(self, 'Animation', os.environ['SHOTS_DIR'], 'animation', True),
-			CheckoutContext(self, 'Previs', os.environ['PREVIS_DIR'], 'animation', True)
+			CheckoutContext(self, 'Model', False),
+			CheckoutContext(self, 'Rig', False),
+			CheckoutContext(self, 'Animation', True),
+			CheckoutContext(self, 'Previs', True)
 		]
 
 		#Initialize the GUI
@@ -167,30 +162,17 @@ class CheckoutDialog(QDialog):
 		text, ok = QInputDialog.getText(self, 'New Shot', 'Enter seq_shot (ie: a01)')
 		if ok:
 			text = str(text)
-			if self.context.name == 'Previs':
-				amu.createNewPrevisFolders(self.context.folder, text)
-			else:
-				amu.createNewShotFolders(self.context.folder, text)
-			self.copy_template_animation(text)
+			print "Trying to create" + text + self.context.name
+			facade.newAnimation(self.context.name, text)
 			self.context.add_item(text)
 			self.refresh()
 		return
 
-	def copy_template_animation(self, shot_name):
-		template = os.path.join(os.environ['SHOTS_DIR'], 'static/animation/stable/static_animation_stable.mb')
-		if(os.path.exists(template)):
-			dest = os.path.join(self.context.folder, shot_name, 'animation/src/v000/'+shot_name+'_animation.mb')
-			shutil.copyfile(template, dest)
-			print 'copied '+template+' to '+dest
-		return
-	
-	def get_filename(self, parentdir):
-		return os.path.basename(os.path.dirname(parentdir))+'_'+os.path.basename(parentdir)
-
+	# TODO: Clean this up so it is not used anymore.
 	def get_asset_path(self):
 		# returns the path for a single asset
 		asset_name = str(self.current_item.text())
-		return os.path.join(self.context.folder, asset_name, self.context.asset_folder)
+		return facade.getAssetPath(asset_name, self.context.name)
 
 	def showIsLockedDialog(self):
 		return cmd.confirmDialog(title = 'Already Unlocked'
@@ -218,16 +200,16 @@ class CheckoutDialog(QDialog):
 
 
 	def unlock(self):
-		print("unlocking!!!!")
+		print("Unlocking.")
 		
 		toUnlock = self.get_asset_path()
-		if amu.isLocked(toUnlock):
+		if facade.isLocked(toUnlock):
 			if self.showConfirmUnlockDialog() == 'No':
 				return
 			if cmd.file(q=True, sceneName=True) != "":
 				cmd.file(save=True, force=True)	
 			cmd.file(force=True, new=True) #open new file
-			amu.unlock(toUnlock)
+			facade.unlock(toUnlock)
 			self.showUnlockedDialog()	
 		else:
 			self.showIsLockedDialog()
@@ -240,17 +222,18 @@ class CheckoutDialog(QDialog):
 	# SLOTS
 	########################################################################
 	def checkout(self):
+
+		# If it's not a file that hasn't been saved before, save it.
 		curfilepath = cmd.file(query=True, sceneName=True)
 		if not curfilepath == '':
 			cmd.file(save=True, force=True)
 
-		toCheckout = self.get_asset_path()
-		
+		itemToCheckout = str(self.current_item.text())
 		try:
-			destpath = amu.checkout(toCheckout, True)
+			filePath = facade.checkout(itemToCheckout, True, self.context.name)
 		except Exception as e:
 			print str(e)
-			if not amu.checkedOutByMe(toCheckout):
+			if not facade.checkedOutByMe(itemToCheckout, self.context.name):
 				cmd.confirmDialog(  title          = 'Can Not Checkout'
                                    , message       = str(e)
                                    , button        = ['Ok']
@@ -259,14 +242,18 @@ class CheckoutDialog(QDialog):
                                    , dismissString = 'Ok')
 				return
 			else:
-				destpath = amu.getCheckoutDest(toCheckout)
+				filePath = facade.getCheckoutDest(itemToCheckout, self.context.name)
 
-		toOpen = os.path.join(destpath, self.get_filename(toCheckout)+'.mb')
-		# open the file
+		# Adding the file path together so we can open the file.
+		userFilePath = facade.getFilepath(filePath, itemToCheckout, self.context.name)
+		toOpen = userFilePath + ".mb"
+		print "maya filePath", toOpen
+
+		# # open the file
 		if os.path.exists(toOpen):
 			cmd.file(toOpen, force=True, open=True)#, loadReferenceDepth="none")
 		else:
-			# create new file
+			# create new file - for new assets
 			cmd.file(force=True, new=True)
 			cmd.file(rename=toOpen)
 			cmd.viewClipPlane('perspShape', ncp=0.01)
@@ -306,3 +293,13 @@ def go():
 	
 if __name__ == '__main__':
 	go()
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

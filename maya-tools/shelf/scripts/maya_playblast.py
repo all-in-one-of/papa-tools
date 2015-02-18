@@ -10,6 +10,7 @@ def simpleBlast(name, startFrame, endFrame):
     currentPanel = mc.getPanel(wf=True)
     currentCamera = mc.modelEditor(currentPanel, q=True, camera=True)
 
+    # Set up camera settings.
     panelSwitch = []
     panelSwitch.append(mc.modelEditor(currentPanel, q=True, nc=True))
     panelSwitch.append(mc.modelEditor(currentPanel, q=True, ns=True))
@@ -74,10 +75,13 @@ def simpleBlast(name, startFrame, endFrame):
     mc.modelEditor(currentPanel, e=True, cv=panelSwitch[21])
     mc.modelEditor(currentPanel, e=True, hu=panelSwitch[22])
 
+    # Save the playblast file in the shot folder.
     filename = name +".mov"
     djv_cmd = (" /usr/local/djv/bin/djv_view  " + filename + " &");
     os.system(djv_cmd)
     print "playblast saved here: "+filename
+
+    # Also save the playblast in the folder called FOR_EDIT. Currently this doesn't exist, so we'll have to update this when that is decided.
     for_edit_dir = os.path.join(os.environ['PRODUCTION_DIR'], 'FOR_EDIT', 'ANIMATION_PLAYBLASTS')
     for_edit_name = os.path.basename(filename).split('_')[0]+'.mov'
     for_edit_path = os.path.join(for_edit_dir, for_edit_name)
@@ -117,7 +121,7 @@ def glBlast(name, startFrame, endFrame):
     # mc.glRender(glWindow, renderSequence=True)
     #=========================BROKEN RIGHT NOW=========================
     
-    print "playblast saved here: "+name+".mov"
+    print "playblast saved here: " + name + ".mov"
 
     mc.confirmDialog(title = 'Error'
                         , message       = 'Doesn\'t work yet!'

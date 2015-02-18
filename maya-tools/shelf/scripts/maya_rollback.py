@@ -6,6 +6,7 @@ import maya.OpenMayaUI as omu
 import sip
 import os, glob, shutil
 import utilities as amu
+import Facade.facade as facade
 
 CHECKOUT_WINDOW_WIDTH = 300
 CHECKOUT_WINDOW_HEIGHT = 400
@@ -79,23 +80,17 @@ class RollbackDialog(QDialog):
 
         #Add the list to select from
         for s in selection:
-            item = QListWidgetItem(os.path.basename(s)) 
-            item.setText(os.path.basename(s))
+            item = QListWidgetItem(s)
+            item.setText(s)
             self.selection_list.addItem(item)
         self.selection_list.sortItems(0)
 
-    def refresh(self):
-        filePath = os.path.join(amu.getUserCheckoutDir(), os.path.basename(os.path.dirname(self.ORIGINAL_FILE_NAME)))
-        checkInDest = amu.getCheckinDest(filePath)
-        versionFolders = os.path.join(checkInDest, "src")
-        selections = glob.glob(os.path.join(versionFolders, '*'))
+    def refresh(self):	
+        selections = facade.getAssetVersions(self.ORIGINAL_FILE_NAME)
         self.update_selection(selections)
 
     def get_checkout_mode(self):
         return ''
-
-    def get_filename(self, parentdir):
-        return os.path.basename(os.path.dirname(parentdir))+'_'+os.path.basename(parentdir)
 
     ########################################################################
     # SLOTS
@@ -132,7 +127,7 @@ class RollbackDialog(QDialog):
                                    , defaultButton = 'Ok'
                                    , cancelButton  = 'Ok'
                                    , dismissString = 'Ok')
-#
+# This didn't work before but we could do once eveything has been updated. We could change the name of the version that way we won't need to look at description before rolling back
 #    def rename_tagged_version(self):
 #        return cmd.promptDialog(  title           = 'Tagg it like its hot'
 #                                   , message       = 'Choose a good naming convention. Something you will remember... Forrrreeeeverrrrrr'
@@ -159,17 +154,24 @@ class RollbackDialog(QDialog):
     def checkout_version(self):
         dialogResult = self.verify_checkout_dialog()
         if(dialogResult == 'Yes'):
-            #checkout
-            version = str(self.current_item.text())[1:]
-            filePath = os.path.join(amu.getUserCheckoutDir(), os.path.basename(os.path.dirname(self.ORIGINAL_FILE_NAME)))
-            toCheckout = amu.getCheckinDest(filePath)
+            # TODO: I would love to clean this up so Maya doesn't have to be aware of the guts of the asset manager. Big question is the exception. Can we do this otherwise?
+            versionToCheckout = str(self.current_item.text())[1:]
             
-            latestVersion = amu.tempSetVersion(toCheckout, version)
-            amu.discard(filePath)
+            # So we first discard, then try to checkout the asset, move the version number so now it's pointing the the next one, and THEN we checkout that one.
+            assetType = facade.getAssetType(self.ORIGINAL_FILE_NAME)
+            assetName = facade.getAssetName(self.ORIGINAL_FILE_NAME)
+
+            print "assetType, assetName: ", assetType, assetName
+
+            toCheckout = facade.getCheckinDest(self.ORIGINAL_FILE_NAME) # I would like to push this into the asset manager eventually.
+
+            latestVersion = amu.tempSetVersion(toCheckout, versionToCheckout)
+            print "latest version: ", latestVersion
+            facade.discard(self.ORIGINAL_FILE_NAME) 
             try:
-                destpath = amu.checkout(toCheckout, True)
+                destpath = facade.checkout(assetName, True, assetType) 
             except Exception as e:
-                if not amu.checkedOutByMe(toCheckout):
+                if not facade.checkedOutByMe(assetName, assetType):
                     cmd.confirmDialog(  title          = 'Can Not Checkout'
                                    , message       = str(e)
                                    , button        = ['Ok']
@@ -178,16 +180,14 @@ class RollbackDialog(QDialog):
                                    , dismissString = 'Ok')
                     return
                 else:
-                    destpath = amu.getCheckoutDest(toCheckout)
+                    destpath = facade.getCheckoutDest(assetName, assetType)
 
             amu.tempSetVersion(toCheckout, latestVersion)
             # move to correct checkout directory
-            correctCheckoutDir = amu.getCheckoutDest(toCheckout)
-            if not destpath==correctCheckoutDir:
-                if os.path.exists(correctCheckoutDir):
-                    shutil.rmtree(correctCheckoutDir)
-                os.rename(destpath, correctCheckoutDir)
-            toOpen = os.path.join(correctCheckoutDir, self.get_filename(toCheckout)+'.mb')
+            correctCheckoutDir = facade.getCheckoutDest(assetName, assetType)
+            fileName = facade.rollback(self.ORIGINAL_FILE_NAME, assetName, assetType, destpath)
+
+            toOpen = fileName +'.mb'
             self.ORIGINAL_FILE_NAME = toOpen
             if not os.path.exists(toOpen):
                 # create new file
@@ -199,33 +199,9 @@ class RollbackDialog(QDialog):
 
     def show_version_info(self):
         asset_version = str(self.current_item.text())
-        filePath = os.path.join(amu.getUserCheckoutDir(), os.path.basename(os.path.dirname(self.ORIGINAL_FILE_NAME)))
-        checkInDest = amu.getCheckinDest(filePath)
-        comment = amu.getVersionComment(checkInDest,asset_version)
+        comment = facade.getVersionComment(asset_version, self.ORIGINAL_FILE_NAME)
         self.version_info_label.setText(comment)
-   #
-   # def tag_version(self):
-   #    dialogResult = self.rename_tagged_version()
-   #   filePath = os.path.join(amu.getUserCheckoutDir(), os.path.basename(os.path.dirname(self.ORIGINAL_FILE_NAME)))
-   #     findPath = amu.getCheckinDest(filePath)
-   #     print findPath
-	# Doesn't work yet sorry :(    shutil.move(findPath, taggedVersion)
-		# When they click 'Done' it will query their text and put it undertagged Version. But the maya command asks to put strings in quotations
-		
-
-
-
-    # too much power, not enough responsibility
-    # def rollback(self):
-    #     dialogResult = self.show_warning_dialog()
-    #     if dialogResult == 'Yes':
-    #         version = str(self.current_item.text())[1:]
-    #         dirPath = os.path.join(amu.getUserCheckoutDir(), os.path.basename(os.path.dirname(self.ORIGINAL_FILE_NAME)))
-    #         print dirPath
-    #         cmd.file(force=True, new=True)
-    #         amu.setVersion(dirPath, int(version))
-    #         self.close()
-            
+   
 def go():
     currentFile = cmd.file(query=True, sceneName=True)
     filePath = os.path.join(amu.getUserCheckoutDir(), os.path.basename(os.path.dirname(currentFile)))

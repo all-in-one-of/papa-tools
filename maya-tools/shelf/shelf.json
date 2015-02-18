@@ -10,20 +10,10 @@
             "annotation":"Checkout a model, rig, or animation.",
             "python_file":"maya_checkout.py"
         },
-	{
-            "icon":"checkout.xpm",
-            "annotation":"Checkout a model, rig, or animation (new).",
-            "python_file":"maya_checkout_new.py"
-        },
         {
             "icon":"checkin.xpm",
             "annotation":"Checkin the current file",
             "python_file":"maya_checkin.py"
-        },
-        {
-            "icon":"checkin.xpm",
-            "annotation":"Checkin the current file (NEW)",
-            "python_file":"maya_checkin_new.py"
         },
         {
             "icon":"savebutton.xpm",
@@ -31,29 +21,14 @@
             "python_file":"maya_save_version.py"
         },
         {
-            "icon":"savebutton.xpm",
-            "annotation":"Version up the current file",
-            "python_file":"maya_save_version_new.py"
-        },
-        {
             "icon":"Trash.xpm",
             "annotation":"Discard changes and release asset",
             "python_file":"maya_discard.py"
         },
         {
-            "icon":"Trash.xpm",
-            "annotation":"Discard changes and release asset",
-            "python_file":"maya_discard_new.py"
-        },
-        {
             "icon":"roll.xpm",
             "annotation":"Roll back to an older version",
             "python_file":"maya_rollback.py"
-        },
-        {
-            "icon":"roll.xpm",
-            "annotation":"NEW Roll back to an older version",
-            "python_file":"maya_rollback_new.py"
         },
         {
             "icon":"bug.xpm",
@@ -81,19 +56,9 @@
             "python_file":"alembic_exporter.py"
         },
         {
-            "icon":"alembic_exporter.xpm",
-            "annotation":"(NEW) Export loaded references to alembic",
-            "python_file":"alembic_exporter_new.py"
-        },
-        {
             "icon":"cam.xpm",
             "annotation":"Make a playblast of your previs or animation file.",
             "python_file":"maya_playblast.py"
-        },
-        {
-            "icon":"cam.xpm",
-            "annotation":"Make a playblast of your previs or animation file.",
-            "python_file":"maya_playblast_new.py"
         },
         {
 		"icon":"garrett.xpm",
@@ -104,11 +69,6 @@
             "icon":"delete.xpm",
             "annotation":"Rename or Delete shots or Copy animation to previs",
             "python_file":"maya_edit_shot.py"
-        },
-        {
-            "icon":"delete.xpm",
-            "annotation":"Rename or Delete shots or Copy animation to previs",
-            "python_file":"maya_edit_shot_new.py"
         }
     ]
 }
