@@ -67,7 +67,7 @@ export HTOOLS_DIR=${PROJECT_TOOLS}/houdini-tools
 export PYTHONPATH=$PYTHONPATH:/usr/autodesk/maya2014-x64/lib/python2.7/site-packages:/usr/lib64/python2.6/site-packages:/usr/lib64/python2.7/site-packages:${PROJECT_TOOLS}:${PROJECT_TOOLS}/asset_manager:${PROJECT_TOOLS}/houdini-tools/python2.6libs:${PROJECT_TOOLS}/houdini-tools/python2.6libs/ui_tools:${PROJECT_TOOLS}/nuke-tools/python:${PYTHONPATH}
 
 # Issue submission website
-export ISSUE_URL="https://docs.google.com/forms/d/1bX1TSz9apCY4SuRkXpvtlb4pcdsmGEB9iHUwqyo4GwU/viewform"
+export ISSUE_URL="https://docs.google.com/forms/d/1VdQgp3o4MLKPVziHR01qYL7NYfiiWXN2VvyGsmpTe1M/viewform"
 
 # Function to build directory structure
 buildProjectDirs()
