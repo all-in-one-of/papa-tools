@@ -1,4 +1,3 @@
-#!/usr/bin/env xdg-open
 
 [Desktop Entry]
 Version=1.0
@@ -11,3 +10,4 @@ Comment[en_US]=Ram's Horn Mari
 Name=Ramari
 Comment=Ram's Horn Mari
 Icon=/users/groups/papa/icons/marzipan_halo.png
+Comment[en_US.UTF-8]=Papa Mari

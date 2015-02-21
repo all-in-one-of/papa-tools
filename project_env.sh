@@ -35,7 +35,7 @@ fi
 # Tools/scripts directory. This project_env.sh script should be placed here.
 # along with the other tools and scripts.
 # Yes, its a chicken egg problem...
-export PROJECT_TOOLS=${JOB}/ramshorn-tools
+export PROJECT_TOOLS=${JOB}/papa-tools
 
 export PATH=${PROJECT_TOOLS}/standalone_scripts:$PATH
 
@@ -188,8 +188,9 @@ export HOUDINI_OTL_PATH=${USER_DIR}:${PRODUCTION_DIR}:${HOUDINI_PATH}
 
 # Add our custom python scripts
 export MAYA_TOOLS_DIR=${PROJECT_TOOLS}/maya-tools
+export MAYA_PLUG_IN_PATH=$MAYA_PLUG_IN_PATH:${MAYA_TOOLS_DIR}/plugins/plugins
 export MAYA_SHELF_DIR=${MAYA_TOOLS_DIR}/shelf
-export MAYA_SCRIPT_PATH=${MAYA_SCRIPT_PATH}:${PYTHONPATH}:${MAYA_SHELF_DIR}
+export MAYA_SCRIPT_PATH=${MAYA_SCRIPT_PATH}:${PYTHONPATH}:${MAYA_SHELF_DIR}:${MAYA_TOOLS_DIR}/plugins/scripts
 
 ###############################################################################
 # Nuke specific environment
