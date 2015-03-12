@@ -8,6 +8,12 @@ import asset_manager.DAOs.editShotDAO as editShotDAO
 import asset_manager.DAOs.discardDAO as discardDAO
 from _xmlplus.dom.javadom import Text
 
+def newAsset(name):
+    if name.strip() != '':
+		filename = name.replace(' ', '_')
+		newItem.createAssetDirectory(filename)
+		return
+
 def getAssetPath(assetName, location):
     path = getItems.getAssetPath(assetName, location)
     print path

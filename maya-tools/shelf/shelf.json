@@ -5,6 +5,11 @@
             "annotation":"Print an inspirational quote from Brent to the command line.",
             "python_file":"brent.py"
         },
+	{
+            "icon":"new.xpm",
+            "annotation":"Create new asset",
+            "python_file":"new_asset.py"
+        },
         {
             "icon":"checkout.xpm",
             "annotation":"Checkout a model, rig, or animation.",
