@@ -5,11 +5,6 @@
             "annotation":"Print an inspirational quote from Brent to the command line.",
             "python_file":"brent.py"
         },
-	{
-            "icon":"new.xpm",
-            "annotation":"Create new asset",
-            "python_file":"new_asset.py"
-        },
         {
             "icon":"checkout.xpm",
             "annotation":"Checkout a model, rig, or animation.",
@@ -64,6 +59,11 @@
             "icon":"cam.xpm",
             "annotation":"Make a playblast of your previs or animation file.",
             "python_file":"maya_playblast.py"
+        },
+        {
+		"icon":"garrett.xpm",
+		"annotation":"Submit an asset issue.",
+		"python_file":"maya_issue_form.py"
         },
         {
             "icon":"delete.xpm",
