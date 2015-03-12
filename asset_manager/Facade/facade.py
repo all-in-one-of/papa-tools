@@ -6,7 +6,7 @@ import asset_manager.DAOs.rollbackDAO as rollbackDAO
 import asset_manager.DAOs.alembicDAO as alembicDAO
 import asset_manager.DAOs.editShotDAO as editShotDAO
 import asset_manager.DAOs.discardDAO as discardDAO
-from _xmlplus.dom.javadom import Text
+#from _xmlplus.dom.javadom import Text
 
 def newAsset(name):
     if name.strip() != '':
