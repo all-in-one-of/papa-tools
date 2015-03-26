@@ -3,12 +3,14 @@
 import os
 import hou
 import hou_asset_mgr
+import subprocess # for call shell script.
 from miscutil import fileutil
 
 import utilities as amu #asset manager utilites
 
 OTLDIR=os.environ['OTLS_DIR']
 ASSETSDIR=os.environ['ASSETS_DIR']
+JOB=os.environ['JOB']
 
 def new():
     otb = ('Container', 'Geometry', 'Cancel')
@@ -60,6 +62,11 @@ def newContainer(hpath):
             hou.hda.installFile(newfilepath, change_oplibraries_file=True)
             newnode = hou.node(hpath).createNode(filename)
             
+            # Then we will call the set_permissions shell script to see if this will fix our issue.
+            set_permissions_path = JOB+"/papa-tools/set_permissions.sh"
+
+            subprocess.call([set_permissions_path])
+
             # templateNode.type().definition().copyToHDAFile(newfilepath, new_name=filename, new_menu_name=name)
             # hou.hda.installFile(newfilepath, change_oplibraries_file=True)
             # fileutil.clobberPermissions(newfilepath)
