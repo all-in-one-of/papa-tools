@@ -55,7 +55,8 @@ def addVersionedFolder(parent, name, toKeep):
     #TODO change for stable selection
     #os.symlink(getNullReference(), os.path.join(new_dir, 'stable','stable'))
     createNodeInfoFile(new_dir, toKeep)
-    nodeInfoLocation = new_dir + ".nodeInfo"
+    nodeInfoLocation = new_dir + "/.nodeInfo"
+    print nodeInfoLocation
     os.system('chmod 660 -R '+ nodeInfoLocation)
     return new_dir
     
