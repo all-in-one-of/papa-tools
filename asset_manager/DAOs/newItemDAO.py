@@ -2,6 +2,7 @@ import os, glob, time
 import shutil
 import asset_manager.DAOs.utilities_new as amu
 from ConfigParser import ConfigParser
+# import hou
 
 # This DAO creates new assets, previs and animation shots.
 
@@ -37,6 +38,7 @@ def createNodeInfoFile(dirPath, toKeep):
 def addProjectFolder(parent, name):
     newPath = os.path.join(parent, name)
     os.makedirs(newPath)
+    os.system('chmod 774 -R '+ newPath)
     return newPath
 
 def addVersionedFolder(parent, name, toKeep):
