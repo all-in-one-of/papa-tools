@@ -196,12 +196,14 @@ def installGeometry(path=''):
 	#print 'Copying '+srcOBJ+' to '+destOBJ
 	try:
 		shutil.copytree(srcOBJ, destOBJ)
+		os.system('chmod 774 -R '+ destOBJ)
 	except Exception as e:
 		print e
 
 	#print 'Copying '+srcBJSON+' to '+destBJSON
 	try:
 		shutil.copytree(src=srcBJSON, dst=destBJSON)
+		os.system('chmod 774 -R '+ destBJSON)
 	except Exception as e:
 		print e
 
