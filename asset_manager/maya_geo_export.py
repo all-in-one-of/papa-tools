@@ -211,6 +211,7 @@ def installGeometry(path=''):
 	srcABC = os.path.join(srcABC, '*');
 	if not os.path.exists(destABC):
 		os.mkdir(destABC);
+		os.system('chmod 774 -R ' + destABC)
 	#print 'Copying '+srcABC+' to '+destABC
 	try:
 		os.system('chmod 774 -R '+srcABC)
