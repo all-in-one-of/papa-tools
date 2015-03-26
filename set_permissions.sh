@@ -9,6 +9,8 @@ chmod 774 -R "$USER_DIR"
 
 for a in "$ASSETS_DIR"/*
 do
+	chmod 774 -R "$a"
+	chmod 660 -R "$a"/model/.nodeInfo
     chmod 774 -R "$a"/geo/abcFiles
 done
 echo "FINISHED"
