@@ -2,7 +2,7 @@ import os, glob, time
 import shutil
 import asset_manager.DAOs.utilities_new as amu
 from ConfigParser import ConfigParser
-import hou
+# import hou
 
 OTLDIR=os.environ['OTLS_DIR']
 ASSETSDIR=os.environ['ASSETS_DIR']
