@@ -81,6 +81,9 @@ def checkin(asset, comment):
     
     # Checkin
     shutil.copytree(assetToCheckIn, newVersionPath)
+
+    # And fix permissions for the new version asset so that everyone can access it.
+    os.system('chmod 774 -R '+ newVersionPath)
     
     timestamp = time.strftime("%a, %d %b %Y %I:%M:%S %p", time.localtime())
     nodeInfo.set("Versioning", "lastcheckintime", timestamp)

@@ -204,6 +204,10 @@ def cloneShot(src_name, dst_name, currentIndex):
     print 'copying '+src_filepath+' to '+dst_filepath
     shutil.copyfile(src_filepath, dst_filepath)
 
+    # Fix permissions to the file.
+    os.system('chmod 774 -R ' + dst_path)
+    os.system('chmod 774 '+ dst_filepath)
+
     #write out new animation info
     timestamp = time.strftime("%a, %d %b %Y %I:%M:%S %p", time.localtime())
     user = amu.getUsername()
