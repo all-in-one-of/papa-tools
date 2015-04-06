@@ -4,9 +4,6 @@ import asset_manager.DAOs.utilities_new as amu
 from ConfigParser import ConfigParser
 # import hou
 
-OTLDIR=os.environ['OTLS_DIR']
-ASSETSDIR=os.environ['ASSETS_DIR']
-
 # This DAO creates new assets, previs and animation shots.
 
 def createNodeInfoFile(dirPath, toKeep):
@@ -121,21 +118,3 @@ def createNewAssetFolders(parent, name):
     os.makedirs(os.path.join(new_dir, "images"))
     os.makedirs(os.path.join(new_dir, "reference"))
     return new_dir
-
-def createAssetDirectory(filename):
-
-    newfilepath = os.path.join(OTLDIR, filename+'.otl')
-
-    if not os.path.exists(newfilepath):
-        
-        createNewAssetFolders(ASSETSDIR, filename)
-	
-	newversiondir = os.path.join(ASSETSDIR, filename+'/otl')
-	print "dir " + newversiondir
-	newversionpath = os.path.join(newversiondir, 'src/v000/'+filename+'.otl')
-	print "path " + newversionpath
-	
-        stablepath = amu.install(newversiondir, newversionpath)
-        fileutil.clobberPermissions(stablepath)
-        os.symlink(stablepath, newfilepath)
-
