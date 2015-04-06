@@ -44,7 +44,9 @@ def checkin():
     print 'File saved'
 
     fileName = cmds.file(q=True, sceneName=True)
-    toInstall = checkAssetType('rig')
+    toInstall = checkAssetType('model')
+    if not toInstall:
+        toInstall = checkAssetType('rig')
 
     if facade.canCheckin(fileName) and saveGeo(): # objs must be saved before checkin
         print "Can check in."
@@ -54,11 +56,25 @@ def checkin():
                   message='What changes did you make?',
                   button=['OK','Cancel'],
                   defaultButton='OK',
+                  button=['CheckIn',
+                  #'ReadyForShaders',
+                  'Cancel'],
+                  defaultButton='CheckIn',
                   dismissString='Cancel',
               sf = True)
         if commentPrompt == 'OK':
             comment = cmds.promptDialog(query=True, text=True);
             print "Comment is: " + comment
+            saveFile() # One more save
+            cmds.file(force=True, new=True) # Open a new file.
+            checkinDest = facade.checkin(fileName, comment, toInstall) # checkin, install to stable directories.
+        # elif commentPrompt == 'ReadyForShaders':
+        #     comment = cmds.promptDialog(query=True, text=True); #setFlag to true so it will always go to check in
+        #     print "Comment is: " + comment
+        #     saveFile() # One more save
+        #     cmds.file(force=True, new=True) # Open a new file.
+        #     checkinDest = facade.checkin(fileName, comment, toInstall) # checkin, install to stable directories.
+        #     tagGeometry()
         else:
             return
         saveFile() # One more save
