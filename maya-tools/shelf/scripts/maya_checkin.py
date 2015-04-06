@@ -54,15 +54,15 @@ def checkin():
         commentPrompt = cmds.promptDialog(
                   title='Comment',
                   message='What changes did you make?',
-                  button=['OK','Cancel'],
-                  defaultButton='OK',
+                  # button=['OK','Cancel'],
+                  # defaultButton='OK',
                   button=['CheckIn',
                   #'ReadyForShaders',
                   'Cancel'],
                   defaultButton='CheckIn',
                   dismissString='Cancel',
               sf = True)
-        if commentPrompt == 'OK':
+        if commentPrompt == 'CheckIn':
             comment = cmds.promptDialog(query=True, text=True);
             print "Comment is: " + comment
             saveFile() # One more save
@@ -77,9 +77,9 @@ def checkin():
         #     tagGeometry()
         else:
             return
-        saveFile() # One more save
-        cmds.file(force=True, new=True) # Open a new file.
-        checkinDest = facade.checkin(fileName, comment, toInstall) # checkin, install to stable directories.
+        # saveFile() # One more save
+        # cmds.file(force=True, new=True) # Open a new file.
+        # checkinDest = facade.checkin(fileName, comment, toInstall) # checkin, install to stable directories.
     else:
         showFailDialog()
 
