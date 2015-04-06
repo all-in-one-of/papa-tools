@@ -109,7 +109,7 @@ def installFiles(toInstall, dest):
     Installs files, removes dependencies.
     """
     specialInstallFiles = [os.path.join(os.environ['SHOTS_DIR'], 'static/animation')]
-    toInstall |= (dest in specialInstallFiles) # Not sure what this or above is.
+    toInstall |= (dest in specialInstallFiles) # Looks like this update the static animation shot with the latest rig...?
 
     srcFile = amu.getAvailableInstallFiles(dest)[0] # Gets a list of all files in the latest version of this directory.
     if toInstall: # If it is a rig, then this updates the stable with the latest version.
