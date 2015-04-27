@@ -48,7 +48,7 @@ def simpleBlast(name, startFrame, endFrame):
     print soundfile
 
     mc.playblast(st=startFrame, et=endFrame, sound=soundfile, fmt="qt", compression="jpeg", qlt=100, forceOverwrite=True, filename=name,
-                 width=1280, height=692, offScreen=True, percent=100, v=False)
+                 width=1280, height=720, offScreen=True, percent=100, v=False)
 
     mel.eval("lookThroughModelPanel "+currentCamera+" "+currentPanel)
     mc.modelEditor(currentPanel, e=True, nc=panelSwitch[0])
@@ -81,11 +81,13 @@ def simpleBlast(name, startFrame, endFrame):
     os.system(djv_cmd)
     print "playblast saved here: "+filename
 
+    os.system('chmod 774 -R ' + filename)
+
     # Also save the playblast in the folder called FOR_EDIT. Currently this doesn't exist, so we'll have to update this when that is decided.
-    for_edit_dir = os.path.join(os.environ['PRODUCTION_DIR'], 'FOR_EDIT', 'ANIMATION_PLAYBLASTS')
-    for_edit_name = os.path.basename(filename).split('_')[0]+'.mov'
-    for_edit_path = os.path.join(for_edit_dir, for_edit_name)
-    shutil.copy(filename, for_edit_path)
+    #for_edit_dir = os.path.join(os.environ['PRODUCTION_DIR'], 'FOR_EDIT', 'ANIMATION_PLAYBLASTS')
+    #for_edit_name = os.path.basename(filename).split('_')[0]+'.mov'
+    #for_edit_path = os.path.join(for_edit_dir, for_edit_name)
+    #hutil.copy(filename, for_edit_path)
 
 def glBlast(name, startFrame, endFrame):
     mc.setAttr('defaultHardwareRenderGlobals.filename', name, type="string")
