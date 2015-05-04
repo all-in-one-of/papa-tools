@@ -46,19 +46,19 @@ connect(createProjectPB.clicked, pc.mariProjectCreate)
 
 changeExportPathPB = gui.QPushButton("Change Export Path for Project")
 layout.addWidget(changeExportPathPB)
-# connect(changeExportPathPB.clicked, changeExportPath)
+connect(changeExportPathPB.clicked, changeExportPath)
 
 ExportSelMapPB = gui.QPushButton("Export Selected Map")
 layout.addWidget(ExportSelMapPB)
-# connect(ExportSelMapPB.clicked, exportSelectedMaps)
+connect(ExportSelMapPB.clicked, exportSelectedMaps)
 
 ExportAllMapsPB = gui.QPushButton("Export All Maps")
 layout.addWidget(ExportAllMapsPB)
-# connect(ExportAllMapsPB.clicked, exportAllMaps)
+connect(ExportAllMapsPB.clicked, exportAllMaps)
 
 AssetInfoPB = gui.QPushButton("Display Asset Info")
 layout.addWidget(AssetInfoPB)
-# connect(AssetInfoPB.clicked, DSPAssetInfo)
+connect(AssetInfoPB.clicked, DSPAssetInfo)
 
 # ------------------------------------------------------------------------------
 mainPal.show
