@@ -4,16 +4,14 @@
 # ------------------------------------------------------------------------------
 
 
+DIR=`dirname $0`
+source ${DIR}/project_env.sh
+
+# Most enviroment variables are now set in project_env.sh.
 #export USER_SCRIPTS=${HOME}/ADRMariScripts/
-export PROJECT_NAME=ramshorn
-export JOB=/groups/${PROJECT_NAME}
-export MARI_SCRIPT_PATH=${JOB}/ramshorn-tools/mari-tools/
-export MARI_DEFAULT_GEOMETRY_PATH=${JOB}/PRODUCTION/assets/
-export ICONS=/usr/local/Mari2.5v2/Media/Icons/
-export PATH=/opt/hfs13.0.343/bin:$PATH
+export ICONS=/usr/local/Mari2.6v4/Media/Icons/
+export PATH=/opt/hfs14.0.201.13/bin:$PATH
 #export MARI_DEFAULT_CACHE=/warthome/${USERNAME}
-
-
 
 #MARI_DEFAULT_GEOMETRY_PATH
 #MARI_DEFAULT_IMAGE_PATH
@@ -22,8 +20,6 @@ export PATH=/opt/hfs13.0.343/bin:$PATH
 #MARI_DEFAULT_SHELF_PATH
 #MARI_DEFAULT_RENDER_PATH
 #MARI_DEFAULT_CAMERA_PATH
-
-
 
 wacomTabSetUp()
 {
@@ -93,7 +89,7 @@ wacomTabSetUp
 
 # Starting Mari
 echo "Starting Mari...";
-/usr/local/Mari2.5v2/mari
+/usr/local/Mari2.6v4/mari
 
 #createJToolsMenu()
 
