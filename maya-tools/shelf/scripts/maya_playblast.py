@@ -77,17 +77,18 @@ def simpleBlast(name, startFrame, endFrame):
 
     # Save the playblast file in the shot folder.
     filename = name +".mov"
-    djv_cmd = (" /usr/local/djv/bin/djv_view  " + filename + " &");
-    os.system(djv_cmd)
+    # djv_cmd = (" /usr/local/djv/bin/djv_view  " + filename + " &");
+    rv_cmd = (" /warthome/InstallFiles/rv-Linux-x86-64-4.0.11/bin/rv  " + filename + " &")
+    os.system(rv_cmd)
     print "playblast saved here: "+filename
 
     os.system('chmod 774 -R ' + filename)
 
     # Also save the playblast in the folder called FOR_EDIT. Currently this doesn't exist, so we'll have to update this when that is decided.
-    #for_edit_dir = os.path.join(os.environ['PRODUCTION_DIR'], 'FOR_EDIT', 'ANIMATION_PLAYBLASTS')
-    #for_edit_name = os.path.basename(filename).split('_')[0]+'.mov'
-    #for_edit_path = os.path.join(for_edit_dir, for_edit_name)
-    #hutil.copy(filename, for_edit_path)
+    for_edit_dir = os.path.join(os.environ['PRODUCTION_DIR'], 'FOR_EDIT', 'ANIMATION_PLAYBLASTS')
+    for_edit_name = os.path.basename(filename).split('_')[0]+'.mov'
+    for_edit_path = os.path.join(for_edit_dir, for_edit_name)
+    shutil.copy(filename, for_edit_path)
 
 def glBlast(name, startFrame, endFrame):
     mc.setAttr('defaultHardwareRenderGlobals.filename', name, type="string")
