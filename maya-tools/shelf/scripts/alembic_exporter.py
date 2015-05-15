@@ -109,6 +109,7 @@ class AlembicExportDialog(QDialog):
 				command = self.build_alembic_command(ref, abcFilePath)
 				print "Export Alembic command: ", command
 				Mel.eval(command)
+				os.system('chmod 774 ' + abcFilePath)
 		
 		self.close_dialog()
 	
