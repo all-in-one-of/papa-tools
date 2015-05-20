@@ -3,12 +3,17 @@
 # Start Up Script for Mari in the pipeline, setting all the variables.
 # ------------------------------------------------------------------------------
 
+# NOTE 5/20/15: I tried cleaning up the Mari code so it follows proper software design practices.
+# I moved the environment variables into project_env and removed the references here,
+# but it broke something in this code so the code could not use the houdini utilities for converting files.
+# Change the code below at your own peril.
+# Chris Wasden
 
-DIR=`dirname $0`
-source ${DIR}/project_env.sh
-
-# Most enviroment variables are now set in project_env.sh.
 #export USER_SCRIPTS=${HOME}/ADRMariScripts/
+export PROJECT_NAME=papa
+export JOB=/groups/${PROJECT_NAME}
+export MARI_SCRIPT_PATH=${JOB}/papa-tools/mari-tools/
+export MARI_DEFAULT_GEOMETRY_PATH=${JOB}/PRODUCTION/assets/
 export ICONS=/usr/local/Mari2.6v4/Media/Icons/
 export PATH=/opt/hfs14.0.201.13/bin:$PATH
 #export MARI_DEFAULT_CACHE=/warthome/${USERNAME}
@@ -89,6 +94,7 @@ wacomTabSetUp
 
 # Starting Mari
 echo "Starting Mari...";
+# /usr/local/Mari2.6v4/mari
 /usr/local/Mari2.6v4/mari
 
 #createJToolsMenu()
