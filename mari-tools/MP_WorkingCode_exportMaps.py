@@ -48,6 +48,7 @@ def convertToRat(geo, filePathNoUDIM):
 		# Get Patch UDIM numbers
 		udim = 1001 + patch.u() + (10 * patch.v())
 
+		os.system('chmod 777 ' + filePathNoUDIM + '_' + str(udim) + '.png')
 		# Convert with Houdini iconvert
 		args = ['iconvert', '-g', 'off', filePathNoUDIM + '_' + str(udim) + '.png', filePathNoUDIM + '_' + str(udim) + '.rat', 'makemips', 'compression="none"']
 		try:
@@ -59,6 +60,7 @@ def convertToRat(geo, filePathNoUDIM):
 		os.remove(filePathNoUDIM + '_' + str(udim) + '.png')
 
 def exportChannel(geo, channel):
+	# NOTE: As we are saving these images as pngs, the color depth MUST be 8-bit!
 	# Set the template for the file name
 	fileName = '$ENTITY_$CHANNEL_$UDIM'
 	fileExt = '.png'
