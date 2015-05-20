@@ -44,8 +44,6 @@ def changeExportPath():
 	cp.write(projInfoFile)
 
 def convertToRat(geo, filePathNoUDIM):
-	print "Converting to .rat: ", filePathNoUDIM
-	print "PATH: ", os.environ.get('PATH')
 	for patch in geo.patchList():
 		# Get Patch UDIM numbers
 		udim = 1001 + patch.u() + (10 * patch.v())
