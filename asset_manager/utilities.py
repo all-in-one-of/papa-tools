@@ -158,6 +158,7 @@ def renameFolder(oldDir, newName):
 	os.renames(oldDir, dest)
 
 def renameVersionedFiles(vDirPath, oldname, newName):
+	print "In renameVersionedFiles: ", vDirPath, oldname, newName
 	src = glob.glob(os.path.join(vDirPath, 'src', '*', '*.mb'))
 	stable = glob.glob(os.path.join(vDirPath, 'stable', '*', '*.mb'))
 	stable = stable+glob.glob(os.path.join(vDirPath, 'stable', '*.mb'))
@@ -166,15 +167,50 @@ def renameVersionedFiles(vDirPath, oldname, newName):
 		dest = os.path.join(head, newName+tail.split(oldname)[1])
 		os.renames(s, dest)
 
+def renameOtls(vDirPath, oldname, newName):
+	print "In renameOtls: ", vDirPath, oldname, newName
+	src = glob.glob(os.path.join(vDirPath, 'src', '*', '*.otl'))
+	stable = glob.glob(os.path.join(vDirPath, 'stable', '*', '*.otl'))
+	# stable = stable+glob.glob(os.path.join(vDirPath, 'stable', '*.otl'))
+	for s in src+stable:
+		head, tail = os.path.split(s)
+		dest = os.path.join(head, newName+tail.split(oldname)[1])
+		os.renames(s, dest)
+
+def updateOtl(newNodeDir, newStableNode, newfilename, oldfilename):
+    nodeInfo = ConfigParser()
+    nodeInfo.read(os.path.join(newNodeDir, ".nodeInfo"))
+    locked = nodeInfo.getboolean("Versioning", "locked")
+    toKeep = nodeInfo.getint("Versioning", "Versionstokeep")
+    newVersion = nodeInfo.getint("Versioning", "latestversion") + 1
+    newVersionPath = os.path.join(newNodeDir, "src", "v"+("%03d" % newVersion))
+
+    os.mkdir(newVersionPath)
+    shutil.copy(newStableNode, newVersionPath)
+
+    timestamp = time.strftime("%a, %d %b %Y %I:%M:%S %p", time.localtime())
+    nodeInfo.set("Versioning", "lastcheckintime", timestamp)
+    nodeInfo.set("Versioning", "lastcheckinuser", getUsername())
+    nodeInfo.set("Versioning", "latestversion", str(newVersion))
+    nodeInfo.set("Versioning", "locked", "False")
+    nodeInfo.set("Comments", 'v' + "%03d" % (newVersion,), getUsername() + ': ' + timestamp + ': ' + '"' + "Renamed asset to " + newfilename + " from " + oldfilename + '"')
+    _writeConfigFile(os.path.join(newNodeDir, ".nodeInfo"), nodeInfo)
+
+    os.rename(os.path.join(newVersionPath, newfilename + "_otl_stable.otl"), os.path.join(newVersionPath, newfilename + ".otl"))
+
+
 def renameAsset(oldDirPath, newName):
+	print "In renameAsset"
 	if not canRename(oldDirPath, newName):
 		raise Exception ("Can not rename")
 	head, tail = os.path.split(oldDirPath)
 	dest = os.path.join(head, newName)
 	modelDir = os.path.join(oldDirPath, 'model')
 	rigDir = os.path.join(oldDirPath, 'rig')
+	otlDir = os.path.join(oldDirPath, 'otl')
 	renameVersionedFiles(modelDir, tail, newName)
 	renameVersionedFiles(rigDir, tail, newName)
+	renameOtls(otlDir, tail, newName)
 	os.renames(oldDirPath, dest)
 
 def hasInstalledChild(dirPath):
