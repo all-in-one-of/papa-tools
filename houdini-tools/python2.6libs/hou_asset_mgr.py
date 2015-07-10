@@ -330,7 +330,7 @@ def rename(node = None):
                 dependents = getAssetDependents(oldAssetName)
 
                 if dependents:
-                    hou.ui.displayMessage('The following assets are depenent on this asset: \n\n'+printList(dependents)+'\nModify these assets first before attempting to rename again!!', title='Can NOT rename!', severity=hou.severityType.Error)
+                    hou.ui.displayMessage('The following assets are dependent on this asset: \n\n'+printList(dependents)+'\nModify these assets first before attempting to rename again!!', title='Can NOT rename!', severity=hou.severityType.Error)
                     return
 
                 nodeDir = os.path.join(os.environ['ASSETS_DIR'], oldAssetName, 'otl')
@@ -354,8 +354,10 @@ def rename(node = None):
                                 node.destroy()
                                 hou.hda.uninstallFile(oldlibraryPath, change_oplibraries_file=False)
                                 subprocess.check_call( ['rm','-f',oldlibraryPath] )
-                                amu.renameAsset(assetDirPath, newfilename)
+                                amu.renameAsset(assetDirPath, newfilename)# Renaming the asset....?
                                 
+                                # So here we remove the stable otl files... But we never clean up the source. 
+                                # I wonder if we should just save it as a new version in the source? That might fix it...
                                 newNodeDir = os.path.join(os.environ['ASSETS_DIR'], newfilename, 'otl')
                                 newStableNode = newfilename + '_otl_stable.otl' 
                                 newOldStableNode = oldAssetName + '_otl_stable.otl' 
@@ -364,6 +366,23 @@ def rename(node = None):
                                 os.remove(newOldDest)
                                 shutil.move(newfilepath,newDest)
                                 os.symlink(newDest, newfilepath)
+
+                                amu.updateOtl(newNodeDir, newDest, newfilename, oldAssetName) # Must be updated after the stable node has been copied over.
+
+
+                                # I guess I should go into each directory and update each src...
+                                # So with each src rename that we do, we will need to change the name (of the digital asset)
+                                # and the menu name (where it is typed in Houdini).
+                                # But here's the question. For each src file, we need THAT source file's DA version, NOT the current one's.
+                                # Since they are not loaded, we do not have access to them yet.
+
+                                # Perhaps we can install each of them and uninstall them one at a time...? Ugly, but possible. 
+                                # Maybe we can assign them a variable here, too, so that we can keep track of them as we go along..?
+                                # We want the ability to revert these assets without losing the name change that we have, I think. If we can.
+                                # Hang on... do we really need to rename every single one of the source files? I guess if we need to revert,
+                                # But I've never seen someone revert an asset in Houdini. At least not the OTLs.
+                                # So maybe we just create a new source otl, and from then on that's what we keep. That's kind of a
+
 
                                 
                 else:
