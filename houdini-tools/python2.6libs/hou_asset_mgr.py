@@ -369,21 +369,6 @@ def rename(node = None):
 
                                 amu.updateOtl(newNodeDir, newDest, newfilename, oldAssetName) # Must be updated after the stable node has been copied over.
 
-
-                                # I guess I should go into each directory and update each src...
-                                # So with each src rename that we do, we will need to change the name (of the digital asset)
-                                # and the menu name (where it is typed in Houdini).
-                                # But here's the question. For each src file, we need THAT source file's DA version, NOT the current one's.
-                                # Since they are not loaded, we do not have access to them yet.
-
-                                # Perhaps we can install each of them and uninstall them one at a time...? Ugly, but possible. 
-                                # Maybe we can assign them a variable here, too, so that we can keep track of them as we go along..?
-                                # We want the ability to revert these assets without losing the name change that we have, I think. If we can.
-                                # Hang on... do we really need to rename every single one of the source files? I guess if we need to revert,
-                                # But I've never seen someone revert an asset in Houdini. At least not the OTLs.
-                                # So maybe we just create a new source otl, and from then on that's what we keep. That's kind of a
-
-
                                 
                 else:
                     logname, realname = amu.lockedBy(info[0].encode('utf-8'))
