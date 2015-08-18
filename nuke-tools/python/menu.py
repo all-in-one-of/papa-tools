@@ -4,6 +4,7 @@ import checkout_Nuke as co
 import rollback_Nuke as rb
 import discard_Nuke as ds
 import autocomp_v16 as autocomp
+import updateStableRenders_Nuke as usr
 import os
 
 
@@ -26,14 +27,18 @@ def rollback():
 def autocomp():
     autocomp.go()
 
+def copyToStable():
+	usr.updateStableRenders()
+
 # get menubar
 menubar = nuke.menu('Nuke')
 
 # add menu items
-menubar.addCommand( 'Ramshorn/check out', 'checkout()')
-menubar.addCommand( 'Ramshorn/check in', 'checkin()')
-menubar.addCommand( 'Ramshorn/discard', 'discard()')
-menubar.addCommand( 'Ramshorn/rollback', 'rollback()')
+menubar.addCommand( 'Papa/Check Out', 'checkout()')
+menubar.addCommand( 'Papa/Check In', 'checkin()')
+menubar.addCommand( 'Papa/Discard', 'discard()')
+menubar.addCommand( 'Papa/Rollback', 'rollback()')
+menubar.addCommand( 'Papa/Copy Renders To Stable', 'copyToStable()')
 #nuke.menu( 'Nuke' ).addCommand( 'Ramshorn/autocomp', 'autocomp()')
 
 # get toolbar
