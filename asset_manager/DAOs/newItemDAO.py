@@ -87,6 +87,19 @@ def createNewShotFolders(parent, name):
     addProjectFolder(os.path.join(new_dir, 'renders'), 'lighting')
     addProjectFolder(os.path.join(new_dir, 'renders'), 'compositing')
 
+    # Papa-specific directories. For Papa convenience only. These will need to be renamed per film.
+    addProjectFolder(os.path.join(new_dir, 'renders', 'lighting'), 'papa')
+    addProjectFolder(os.path.join(new_dir, 'renders', 'lighting', 'papa'), 'stable')
+    addProjectFolder(os.path.join(new_dir, 'renders', 'lighting'), 'mindy')
+    addProjectFolder(os.path.join(new_dir, 'renders', 'lighting', 'mindy'), 'stable')
+    addProjectFolder(os.path.join(new_dir, 'renders', 'lighting'), 'steve')
+    addProjectFolder(os.path.join(new_dir, 'renders', 'lighting', 'steve'), 'stable')
+    addProjectFolder(os.path.join(new_dir, 'renders', 'lighting'), 'set')
+    addProjectFolder(os.path.join(new_dir, 'renders', 'lighting', 'set'), 'stable')
+    addProjectFolder(os.path.join(new_dir, 'renders', 'lighting'), 'misc')
+    addProjectFolder(os.path.join(new_dir, 'renders', 'lighting', 'misc'), 'stable')
+
+
 def createNewPrevisFolders(parent, name):
     parent = os.environ['PREVIS_DIR']
     # This is basically the same as "createNewShotFolders" method
