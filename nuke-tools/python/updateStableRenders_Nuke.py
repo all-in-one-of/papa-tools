@@ -58,6 +58,7 @@ def copyToStable(render_path):
 				# Then copy the new renders to the stable folder.
 				for image in renders:
 					shutil.copy(os.path.join(version_path, image), stable_dir)
+				os.system('chmod 774 -R '+ stable_dir)
 	# else:
 	# 	# Is this necessary? Not every shot is going to have these...
 	# 	show_dialog(os.path.basename(render_path) + " does not have any renders yet!")
@@ -77,7 +78,7 @@ def updateStableRenders():
 
 		# /production/shots/[shot_name]/renders/lighting/[folder names]
 		renders_directory = os.path.join(os.environ['SHOTS_DIR'], shotName, "renders", "lighting")
-		show_dialog("render_directory: " + renders_directory)
+		# show_dialog("render_directory: " + renders_directory)
 
 		# Then a list of renders that we want to do.
 		render_group = ['mindy', 'misc', 'papa', 'set', 'steve']
