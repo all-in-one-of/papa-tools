@@ -87,6 +87,9 @@ def bjsonExport(objfiles, path):
 		@post: directory for 'path' is created if it wasn't already
 	'''
 	
+	# NOTE: 8/26/15: This is currently not being called anywhere.
+	# See note for generateGeometry below to see why this is not being called anymore.
+
 	# Create directory if it doesn't exist
 	if not os.path.exists(path):
 		os.makedirs(path)
@@ -171,21 +174,25 @@ def installGeometry(path=''):
 		@return: True is the files were moved successfully
 		@throws: a shutil exception if the move failed
 	'''
+
+	# NOTE: 8/26/15: All code involved with .bjson is currently not being called.
+	# See generateGeometry below for information about this.
+
 	print "install newly created geo in files"
 	path=os.path.dirname(mc.file(q=True, sceneName=True))
 	assetName, assetType, version = decodeFileName()
 
 	srcOBJ = os.path.join(path, 'geo/objFiles')
-	srcBJSON = os.path.join(path, 'geo/bjsonFiles')
+	# srcBJSON = os.path.join(path, 'geo/bjsonFiles')
 	srcABC = os.path.join(path, 'geo/abcFiles')
 	destOBJ = os.path.join(os.environ['ASSETS_DIR'], assetName, 'geo/objFiles')
-	destBJSON = os.path.join(os.environ['ASSETS_DIR'], assetName, 'geo/bjsonFiles')
+	# destBJSON = os.path.join(os.environ['ASSETS_DIR'], assetName, 'geo/bjsonFiles')
 	destABC = os.path.join(os.environ['ASSETS_DIR'], assetName, 'geo/abcFiles')
 
 	if os.path.exists(destOBJ):
 		shutil.rmtree(destOBJ)
-	if os.path.exists(destBJSON):
-		shutil.rmtree(destBJSON)
+	# if os.path.exists(destBJSON):
+	# 	shutil.rmtree(destBJSON)
 	if os.path.exists(destABC):
 		try:
 			shutil.rmtree(destABC)
@@ -202,12 +209,12 @@ def installGeometry(path=''):
 		print e
 
 	#print 'Copying '+srcBJSON+' to '+destBJSON
-	try:
-		os.system('chmod 774 -R' + srcBJSON)
-		shutil.copytree(src=srcBJSON, dst=destBJSON)
-		os.system('chmod 774 -R '+ destBJSON)
-	except Exception as e:
-		print e
+	# try:
+	# 	os.system('chmod 774 -R' + srcBJSON)
+	# 	shutil.copytree(src=srcBJSON, dst=destBJSON)
+	# 	os.system('chmod 774 -R '+ destBJSON)
+	# except Exception as e:
+	# 	print e
 
 	#treat alembic special so we don't mess up concurrent houdini reading . . .
 	srcABC = os.path.join(srcABC, '*');
@@ -245,6 +252,17 @@ def generateGeometry(path=''):
 		@post: Missing filenames are printed out to both the Maya terminal as well
 				as presented in a Maya confirm dialog.
 	'''
+
+	# 8/26/15: NOTE: The bjson format has been causing lots of issues in the pipeline.
+	# The Houdini utility that we run to convert to bjson keeps stalling, and it breaks
+	# when we try to move bjson files over to another directory.
+	# Since we don't actually use the bjson files (as far as I know), I'm commenting 
+	# out any code that deals with .bjson stuff.
+	
+	# For future explorers, beware: there be dragons.
+	# Might have to do with file permissions on the server; we've had issues with
+	# that all year long...
+	# - Chris Wasden
 	path=os.path.dirname(mc.file(q=True, sceneName=True))
 	print 'generateGeometry start'
 	if not os.path.exists (os.path.join(path, 'geo')):
@@ -252,7 +270,7 @@ def generateGeometry(path=''):
 
 	# Define output paths
 	OBJPATH = os.path.join(path, "geo/objFiles")
-	BJSONPATH = os.path.join(path, "geo/bjsonFiles")
+	# BJSONPATH = os.path.join(path, "geo/bjsonFiles")
 	ABCPATH = os.path.join(path, "geo/abcFiles")
 	
 	# Make initial selection
@@ -262,8 +280,8 @@ def generateGeometry(path=''):
 	# Delete old obj and bjson folders
 	if os.path.exists(OBJPATH):
 		shutil.rmtree(OBJPATH)
-	if os.path.exists(BJSONPATH):
-		shutil.rmtree(BJSONPATH)
+	# if os.path.exists(BJSONPATH):
+	# 	shutil.rmtree(BJSONPATH)
 	if os.path.exists(ABCPATH):
 		shutil.rmtree(ABCPATH)
 	
@@ -275,11 +293,11 @@ def generateGeometry(path=''):
 		return False
 	
 	# Convert .obj files to .bjson
-	bjsons = bjsonExport(objs, BJSONPATH)
+	# bjsons = bjsonExport(objs, BJSONPATH)
 	
-	# Check to see if all .bjson files were created
-	if not len(checkFiles(bjsons)) == 0:
-		return False
+	# # Check to see if all .bjson files were created
+	# if not len(checkFiles(bjsons)) == 0:
+	# 	return False
 
 	# Export static alembic files
 	abcs = abcExport(selection_long, ABCPATH)
