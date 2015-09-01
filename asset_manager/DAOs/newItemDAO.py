@@ -98,6 +98,8 @@ def createNewShotFolders(parent, name):
     addProjectFolder(os.path.join(new_dir, 'renders', 'lighting', 'set'), 'stable')
     addProjectFolder(os.path.join(new_dir, 'renders', 'lighting'), 'misc')
     addProjectFolder(os.path.join(new_dir, 'renders', 'lighting', 'misc'), 'stable')
+    addProjectFolder(os.path.join(new_dir, 'renders', 'lighting'), 'lights')
+    addProjectFolder(os.path.join(new_dir, 'renders', 'lighting', 'lights'), 'stable')
 
 
 def createNewPrevisFolders(parent, name):

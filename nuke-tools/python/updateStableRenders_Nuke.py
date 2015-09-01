@@ -81,7 +81,7 @@ def updateStableRenders():
 		# show_dialog("render_directory: " + renders_directory)
 
 		# Then a list of renders that we want to do.
-		render_group = ['mindy', 'misc', 'papa', 'set', 'steve']
+		render_group = ['lights', 'mindy', 'misc', 'papa', 'set', 'steve']
 
 		for group in render_group:
 			copyToStable(os.path.join(renders_directory, group))
