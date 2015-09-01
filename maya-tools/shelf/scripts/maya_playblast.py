@@ -4,6 +4,7 @@ import maya.cmds as mc
 import maya.mel as mel
 import os
 import shutil
+from ConfigParser import ConfigParser
 
 def simpleBlast(name, startFrame, endFrame):
 
@@ -84,8 +85,23 @@ def simpleBlast(name, startFrame, endFrame):
 
     os.system('chmod 774 -R ' + filename)
 
-    # Also save the playblast in the folder called FOR_EDIT. Currently this doesn't exist, so we'll have to update this when that is decided.
-    for_edit_dir = os.path.join(os.environ['PRODUCTION_DIR'], 'FOR_EDIT', 'ANIMATION_PLAYBLASTS')
+    # Here we need some way to distinguish if it is previs or if it is animation. Then we can save it in a different folder somehow.
+    # The checkoutInfo file has the name previs or shots in it.
+
+    fileName = mc.file(q=True, sceneName=True)
+    assetToCheckIn = os.path.join(os.path.join(os.environ['USER_DIR'], 'checkout'), os.path.basename(os.path.dirname(fileName)))
+
+    chkoutInfo = ConfigParser()
+    chkoutInfo.read(os.path.join(assetToCheckIn, ".checkoutInfo"))
+    chkInDest = chkoutInfo.get("Checkout", "checkedoutfrom")
+
+    if "previs" in chkInDest:
+        print "Previs is here"
+        for_edit_dir = os.path.join(os.environ['PRODUCTION_DIR'], 'FOR_EDIT', 'PREVIS_PLAYBLASTS')
+    else:
+        print "Animation is here"
+        for_edit_dir = os.path.join(os.environ['PRODUCTION_DIR'], 'FOR_EDIT', 'ANIMATION_PLAYBLASTS')
+    print "for_edit_dir: " + for_edit_dir
     for_edit_name = os.path.basename(filename).split('_')[0]+'.mov'
     for_edit_path = os.path.join(for_edit_dir, for_edit_name)
     shutil.copy(filename, for_edit_path)
