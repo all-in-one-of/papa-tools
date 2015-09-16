@@ -43,6 +43,7 @@ def simpleBlast(name, startFrame, endFrame):
     mc.modelEditor(currentPanel, e=True, nurbsSurfaces=0)
     mc.modelEditor(currentPanel, e=True, strokes=1)
     mc.modelEditor(currentPanel, e=True, cameras=0)
+    mc.modelEditor(currentPanel, e=True, imagePlane=1)
 
     playback_slider = mel.eval('$tmpVar=$gPlayBackSlider')
     soundfile = mc.timeControl(playback_slider, q=True, sound=True)
