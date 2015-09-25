@@ -144,13 +144,19 @@ class AlembicExportDialog(QDialog):
 
 		if tagged == "":
 			return ""
+		print "tagged: " + ' '.join(tagged)
 
 		# Then we get the dependencies of that item to be tagged.
 		depList = self.get_dependancies(ref)
 
-		# Not sure yet what roots_string is for. Figure out.
+		# This determines the pieces that are going to be exported via alembic.
 		roots_string = ""
-		roots_string = " ".join([roots_string, "-root %s"%(tagged.name())])
+		# roots_string = " ".join([roots_string, "-root %s"%(tagged.name())])
+		for alem_obj in tagged:
+			print "alem_obj: " + alem_obj
+			roots_string += (" -root %s"%(alem_obj))
+		# roots_string = " ".join([roots_string, "-root %s"%(' '.join(tagged))])
+		print "roots_string: " + roots_string
 
 
 		# But it seems we add the dependencies to the thing being exported.
@@ -167,6 +173,7 @@ class AlembicExportDialog(QDialog):
 		end_frame = cmds.playbackOptions(q=1, animationEndTime=True) + 5
 
 		# Then here is the actual Alembic Export command for Mel.
+		# command = 'AbcExport -j "%s -frameRange %s %s -step 0.25 -writeVisibility -noNormals -uvWrite -worldSpace -file %s"'%(roots_string, str(start_frame), str(end_frame), abcfilepath)
 		command = 'AbcExport -j "%s -frameRange %s %s -step 0.25 -writeVisibility -noNormals -uvWrite -worldSpace -file %s"'%(roots_string, str(start_frame), str(end_frame), abcfilepath)
 		return command
 
@@ -189,14 +196,37 @@ class AlembicExportDialog(QDialog):
 
 	def get_tagged_children(self, node):
 		# Too bad this is similar to the get_tagged_node method. Maybe this could be combined...
+		# This needs to grab multiple pieces of geometry - currently this only grabs one. 
+		# Can we export multiple pieces of geometry? Usually it's been a little different since the mesh is in one place,
+		# but it might be good to set it up so that geo in multiple places can be grabbed.
+		tagged_children = []
+		# for child in node.listRelatives(c=True):
+		# 	if child.hasAttr("BYU_Alembic_Export_Flag"):
+		# 		return child
+		# 	else:
+		# 		taggedChild = self.get_tagged_children(child)
+		# 		if taggedChild != "":
+		# 			return taggedChild
+		# return ""
 		for child in node.listRelatives(c=True):
 			if child.hasAttr("BYU_Alembic_Export_Flag"):
-				return child
+				# print "tagged child: "
+				# print child
+				tagged_children.append(str(child))
 			else:
 				taggedChild = self.get_tagged_children(child)
-				if taggedChild != "":
-					return taggedChild
-		return ""
+				# if taggedChild != "":
+				if taggedChild: # Check if the list is empty
+					# print "tagged children: "
+					# print taggedChild
+					# return taggedChild
+					# If ther child below has any elements in the list, then we need to add then here...
+					# We need to add them one at a time, and somehow check for uniqueness.
+					for tag in taggedChild:
+						tagged_children.append(tag)
+		# print "tagged children: "
+		# print tagged_children
+		return tagged_children
 
 	def get_dependancies(self, ref):
 		# Looks like the 
