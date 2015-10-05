@@ -64,6 +64,11 @@
             "icon":"delete.xpm",
             "annotation":"Rename or Delete shots or Copy animation to previs",
             "python_file":"maya_edit_shot.py"
+        },
+        {
+	  "icon": "AndrePickerImage.xpm",
+	  "annotation": "Mindy GUI Picker",
+	  "python_file":"mindyFacialGUI.py"
         }
     ]
 }
