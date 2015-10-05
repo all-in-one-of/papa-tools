@@ -176,33 +176,37 @@ def DOIT(*args):
     cmds.warning('Welp, you asked for it.')
 
 def go():
-	
-	
-	if cmds.windowPref('window',exists=True): cmds.windowPref('window',remove=True)
-	if cmds.window('window',exists=True): cmds.deleteUI('window',wnd=True)
+		
+	if cmds.objExists('cam_GUIMINDY_01') == True:
+			
+		if cmds.windowPref('window',exists=True): cmds.windowPref('window',remove=True)
+		if cmds.window('window',exists=True): cmds.deleteUI('window',wnd=True)
 
-	newWindow = cmds.window('window', title = 'Mindy Facial GUI', s=False, w=605)
-	form = cmds.formLayout(w=605)
-	mindyEditor = cmds.modelEditor()
-	mindyAll = cmds.button(label = 'Key All', w=50, command = keyAll)
-	mindyRowTop = cmds.rowLayout(parent = form, nc=2)
-	mindyClearAll = cmds.button(label = 'Clear All', w= 296, command = clearAll)
-	mindyResetAll = cmds.button(label = 'Reset All', w= 296, command = resetAll)
-	cmds.setParent( '..' )
-	mindyColumn = cmds.columnLayout(w=605)
-	cmds.button(label = 'K', height=158, command = keyBrows)
-	cmds.button(label = 'K', height=198, command = keyUpperFace)
-	cmds.button(label = 'K', height=295, command = keyLowerFace)
-	cmds.button(label = 'K', height=160, command = keyMouth)
-	mindyRow = cmds.rowLayout(parent = form, nc=3)
-	cmds.button(label = 'Toggle Minor Controls', w=195, command = minorVisibility)
-	cmds.button(label = 'Toggle Micro Controls', w=200, command = microVisibility)
-	cmds.button(label = 'DONT CLICK THIS BUTTON', w=195, command = theyPushedIt)
+		newWindow = cmds.window('window', title = 'Mindy Facial GUI', s=False, w=605)
+		form = cmds.formLayout(w=605)
+		mindyEditor = cmds.modelEditor()
+		mindyAll = cmds.button(label = 'Key All', w=50, command = keyAll)
+		mindyRowTop = cmds.rowLayout(parent = form, nc=2)
+		mindyClearAll = cmds.button(label = 'Clear All', w= 296, command = clearAll)
+		mindyResetAll = cmds.button(label = 'Reset All', w= 296, command = resetAll)
+		cmds.setParent( '..' )
+		mindyColumn = cmds.columnLayout(w=605)
+		cmds.button(label = 'K', height=158, command = keyBrows)
+		cmds.button(label = 'K', height=198, command = keyUpperFace)
+		cmds.button(label = 'K', height=295, command = keyLowerFace)
+		cmds.button(label = 'K', height=160, command = keyMouth)
+		mindyRow = cmds.rowLayout(parent = form, nc=3)
+		cmds.button(label = 'Toggle Minor Controls', w=195, command = minorVisibility)
+		cmds.button(label = 'Toggle Micro Controls', w=200, command = microVisibility)
+		cmds.button(label = 'DONT CLICK THIS BUTTON', w=195, command = theyPushedIt)
+		
+		cmds.formLayout( form, edit=True, attachForm=[(mindyEditor, 'top', 5), (mindyEditor, 'left', 5), (mindyAll, 'left', 5), (mindyAll, 'right', 5), (mindyRowTop, 'left', 5), (mindyRowTop, 'right', 5), (mindyRow, 'left', 5), (mindyRow, 'bottom', 5), (mindyRow, 'right', 5), (mindyColumn, 'top', 5), (mindyColumn, 'right', 5) ], attachControl=[(mindyEditor, 'bottom', 5, mindyAll), (mindyColumn, 'bottom', 5, mindyAll), (mindyAll, 'bottom', 5, mindyRowTop),(mindyRowTop, 'bottom', 5, mindyRow)], attachPosition=[(mindyEditor, 'right', 0, 96), (mindyColumn, 'left', 0, 96)], attachNone=(mindyAll, 'top') )
+		
+		cmds.modelEditor( mindyEditor, edit=True, camera= 'cam_GUIMINDY_01', wos=False, hud=False, gr=False, da = "smoothShaded", handles=False)
+		
+		cmds.showWindow(newWindow)
+	else:
+		confirm = cmds.confirmDialog(title='Error', message='Make sure Mindy is in your scene.', button='Ok', defaultButton='Ok', dismissString='Ok' )
 
-	cmds.formLayout( form, edit=True, attachForm=[(mindyEditor, 'top', 5), (mindyEditor, 'left', 5), (mindyAll, 'left', 5), (mindyAll, 'right', 5), (mindyRowTop, 'left', 5), (mindyRowTop, 'right', 5), (mindyRow, 'left', 5), (mindyRow, 'bottom', 5), (mindyRow, 'right', 5), (mindyColumn, 'top', 5), (mindyColumn, 'right', 5) ], attachControl=[(mindyEditor, 'bottom', 5, mindyAll), (mindyColumn, 'bottom', 5, mindyAll), (mindyAll, 'bottom', 5, mindyRowTop),(mindyRowTop, 'bottom', 5, mindyRow)], attachPosition=[(mindyEditor, 'right', 0, 96), (mindyColumn, 'left', 0, 96)], attachNone=(mindyAll, 'top') )
-
-	cmds.modelEditor( mindyEditor, edit=True, camera= 'cam_GUIMINDY_01', wos=False, hud=False, gr=False, da = "smoothShaded", handles=False)
-
-	cmds.showWindow(newWindow)
 	
 go()
