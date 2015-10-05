@@ -66,9 +66,9 @@
             "python_file":"maya_edit_shot.py"
         },
         {
-	  "icon": "AndrePickerImage.xpm",
-	  "annotation": "Mindy GUI Picker",
-	  "python_file":"mindyFacialGUI.py"
+			"icon": "mindyFacialIcon.xpm",
+			"annotation": "Mindy Facial GUI",
+			"python_file":"mindyFacialGUI.py"
         }
     ]
 }
