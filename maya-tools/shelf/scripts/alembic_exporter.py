@@ -144,14 +144,16 @@ class AlembicExportDialog(QDialog):
 
 		if tagged == "":
 			return ""
-		print "tagged: " + ' '.join(tagged)
 
 		# Then we get the dependencies of that item to be tagged.
 		depList = self.get_dependancies(ref)
 
 		# This determines the pieces that are going to be exported via alembic.
 		roots_string = ""
-		# roots_string = " ".join([roots_string, "-root %s"%(tagged.name())])
+		print "tagged: "
+		print tagged
+
+		# Each of these should be in a list, so it should know how many to add the -root tag to the alembic.
 		for alem_obj in tagged:
 			print "alem_obj: " + alem_obj
 			roots_string += (" -root %s"%(alem_obj))
@@ -181,8 +183,10 @@ class AlembicExportDialog(QDialog):
 		# Looks for a tagged node that has the BYU Alembic Export flag on it.
 		refNodes = cmds.referenceQuery(unicode(ref), nodes=True)
 		rootNode = ls(refNodes[0])
+		taggedNode = []
 		if rootNode[0].hasAttr("BYU_Alembic_Export_Flag"):
-			taggedNode = rootNode[0]
+			# taggedNode = rootNode[0]
+			taggedNode.append(rootNode[0])
 		else:
 			# Otherwise get the tagged node that is in the children.
 			taggedNode = self.get_tagged_children(rootNode[0])
