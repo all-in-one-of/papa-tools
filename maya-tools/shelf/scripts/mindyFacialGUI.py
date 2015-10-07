@@ -177,7 +177,7 @@ def DOIT(*args):
 
 def go():
 		
-	if cmds.objExists('cam_GUIMINDY_01') == True:
+	if cmds.objExists('papa_mindy_rig_stable:cam_GUIMINDY_01') == True:
 			
 		if cmds.windowPref('window',exists=True): cmds.windowPref('window',remove=True)
 		if cmds.window('window',exists=True): cmds.deleteUI('window',wnd=True)
