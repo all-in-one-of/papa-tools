@@ -45,8 +45,9 @@ import utilities as amu
 returns the correct Houdini render output path for the shot
 '''
 def get_output_path(shot, prefix):
-    path = os.path.join(os.environ['SHOTS_DIR'], shot, 'renders/lighting')
+    path = os.path.join(os.environ['SHOTS_DIR'], shot, 'renders/lighting', prefix)
     path = amu.set_version(path, prefix)
+    os.system('chmod 777 -R '+ path)
     path = path.replace(os.environ['JOB'], '$JOB')
     name = shot+'_$F3.exr'
     return  os.path.join(path, name)
