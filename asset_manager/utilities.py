@@ -798,7 +798,8 @@ def set_version(filepath, prefix=''):
             latest = versions[-1-index]
             v = os.path.basename(latest)
             index += 1
-            if re.match(prefix+'v[0-9]+', v):
+            # if re.match(prefix+'v[0-9]+', v):
+            if re.match('v[0-9]+', v):
                 match = True
                 break
         if match:
@@ -806,12 +807,15 @@ def set_version(filepath, prefix=''):
             if not os.listdir(latest):
                 return latest
         else:
-            v = prefix+'v000'
+            # v = prefix+'v000'
+            v = 'v000'
     else:
-        v = prefix+'v000'
+        # v = prefix+'v000'
+        v = 'v000'
     
     latest_int = int(v[-3:])+1
-    latest = os.path.join(filepath,prefix+'v'+'%03d'%latest_int)
+    # latest = os.path.join(filepath,prefix+'v'+'%03d'%latest_int)
+    latest = os.path.join(filepath, 'v'+'%03d'%latest_int)
 
     os.mkdir(latest)
     return latest
