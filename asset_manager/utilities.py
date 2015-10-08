@@ -69,6 +69,7 @@ def addVersionedFolder(parent, name, toKeep):
 	os.makedirs(os.path.join(new_dir, "src", "v000"))
 	os.makedirs(os.path.join(new_dir, "stable"))
 	os.makedirs(os.path.join(new_dir, 'stable', 'backups'))
+	os.system('chmod 774 -R '+ new_dir)
 
 	#os.symlink(os.path.join(new_dir, 'stable', getNullReference()), os.path.join(new_dir, 'stable','stable'))
 	#TODO change for stable selection
