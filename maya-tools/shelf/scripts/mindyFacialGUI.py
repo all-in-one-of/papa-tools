@@ -202,7 +202,7 @@ def go():
 		
 		cmds.formLayout( form, edit=True, attachForm=[(mindyEditor, 'top', 5), (mindyEditor, 'left', 5), (mindyAll, 'left', 5), (mindyAll, 'right', 5), (mindyRowTop, 'left', 5), (mindyRowTop, 'right', 5), (mindyRow, 'left', 5), (mindyRow, 'bottom', 5), (mindyRow, 'right', 5), (mindyColumn, 'top', 5), (mindyColumn, 'right', 5) ], attachControl=[(mindyEditor, 'bottom', 5, mindyAll), (mindyColumn, 'bottom', 5, mindyAll), (mindyAll, 'bottom', 5, mindyRowTop),(mindyRowTop, 'bottom', 5, mindyRow)], attachPosition=[(mindyEditor, 'right', 0, 96), (mindyColumn, 'left', 0, 96)], attachNone=(mindyAll, 'top') )
 		
-		cmds.modelEditor( mindyEditor, edit=True, camera= 'cam_GUIMINDY_01', wos=False, hud=False, gr=False, da = "smoothShaded", handles=False)
+		cmds.modelEditor( mindyEditor, edit=True, camera= 'papa_mindy_rig_stable:cam_GUIMINDY_01', wos=False, hud=False, gr=False, da = "smoothShaded", handles=False)
 		
 		cmds.showWindow(newWindow)
 	else:
