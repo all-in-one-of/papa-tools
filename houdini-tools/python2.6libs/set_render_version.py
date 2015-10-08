@@ -45,6 +45,7 @@ import utilities as amu
 returns the correct Houdini render output path for the shot
 '''
 def get_output_path(shot, prefix):
+    print "prefix: " + prefix
     path = os.path.join(os.environ['SHOTS_DIR'], shot, 'renders/lighting', prefix)
     path = amu.set_version(path, prefix)
     os.system('chmod 777 -R '+ path)
@@ -55,7 +56,7 @@ def get_output_path(shot, prefix):
 #to be called from a mantra node in houdini
 me = hou.pwd()
 shot = me.parm('shot').evalAsString()
-render_pass = me.parm('render_pass').evalAsString()+'_'
+render_pass = me.parm('render_pass').evalAsString()
 print 'shot_: '+str(shot)
 path = get_output_path(shot, render_pass)
 me.parm('vm_picture').set(path)
