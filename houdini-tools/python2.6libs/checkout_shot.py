@@ -62,7 +62,8 @@ class CheckoutShotDialog(QDialog):
                     self.done(0)
                 else:
                     hou.hipFile.clear()
-                    hou.hipFile.save(toOpen) 
+                    hou.hipFile.save(toOpen)
+                    os.system('chmod 774 -R '+ toOpen)
                     self.done(0)
             elif self.currentShot.checkedOutByMe():
                 destpath = self.currentShot.getCheckoutDest()
@@ -130,6 +131,7 @@ class Shot:
         self.description = self._getDescription()
     
     def _getWorkingDirectory(self):
+        # Get the working directory, and creates it if it doesn't exist.
         parent = os.path.join(os.environ['SHOTS_DIR'], self.name)
         wd = os.path.join(parent, self.shotType)
         if not amu.isVersionedFolder(wd):
