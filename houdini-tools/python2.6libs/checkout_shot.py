@@ -133,7 +133,7 @@ class Shot:
         parent = os.path.join(os.environ['SHOTS_DIR'], self.name)
         wd = os.path.join(parent, self.shotType)
         if not amu.isVersionedFolder(wd):
-            amu.addVersionedFolder(parent, self.shotType, 5)
+            amu.addVersionedFolder(parent, self.shotType, 5) # Good instance of switching to the NewItemDAO when it is appropriate.
         return wd 
     
     def _getDescription(self):
