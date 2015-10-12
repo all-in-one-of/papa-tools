@@ -1,28 +1,45 @@
 import maya.cmds as cmds
 
-browMacro = ['cc_rEyeBrowOut_01', 'cc_rEyeBrowMid_01', 'cc_rEyeBrowInn_01', 'cc_rEyeBrowScrunch_01', 'cc_EyeBrows_01', 'cc_lEyeBrowScrunch_01', 'cc_lEyeBrowInn_01', 'cc_lEyeBrowMid_01', 'cc_lEyeBrowOut_01']
-browMinor = ['cc_lBrowTWMid_01', 'cc_rBrowTWMid_01', 'cc_lBrowTWOut_01', 'cc_rBrowTWOut_01', 'cc_rBrowTWInn_01', 'cc_rBrowFBOut_01', 'cc_rBrowFBMid_01', 'cc_rBrowFBInn_01', 'cc_lBrowFBInn_01', 'cc_lBrowFBMid_01', 'cc_lBrowFBOut_01', 'cc_lBrowTWInn_01', 'cc_minor_rEyeBrowOutLR_01', 'cc_minor_rEyeBrowMidLR_01', 'cc_minor_rEyeBrowInnLR_01', 'cc_minor_lEyeBrowInnLR_01', 'cc_minor_lEyeBrowMidLR_01', 'cc_minor_lEyeBrowOutLR_01']
-upperFaceMacro = ['cc_nose_01', 'cc_noseTW_01', 'cc_rEyeScale_01', 'cc_rSquint_01', 'cc_rIris_01', 'cc_rPupil_01', 'cc_rEye_01', 'cc_rEyeLidDwn_01', 'cc_rEyeLidAngle_01', 'cc_lEyeLidAngle_01', 'cc_rEyeLidUpp_01', 'cc_lEyeLidDwn_01', 'cc_lEyeLidUpp_01', 'cc_lEye_01', 'cc_lIris_01', 'cc_lPupil_01', 'cc_lEyeScale_01', 'cc_lSquint_01']
-upperFaceMinor = ['cc_rUppEyeLidLROut_01', 'cc_rUppEyeLidLRMid_01', 'cc_rUppEyeLidLRInn_01', 'cc_minor_rSquintLR_01', 'cc_rDwnEyeLidLROut_01', 'cc_rDwnEyeLidLRMid_01', 'cc_rDwnEyeLidLRInn_01', 'cc_lDwnEyeLidLRInn_01', 'cc_lDwnEyeLidLRMid_01', 'cc_lDwnEyeLidLROut_01', 'cc_minor_lSquintLR_01', 'cc_lUppEyeLidLRInn_01', 'cc_lUppEyeLidLRMid_01', 'cc_lUppEyeLidLROut_01']
-lowerFaceMacro = ['cc_rSneer_01', 'cc_lSneer_01', 'cc_lMouthCorner_01', 'cc_rMouthCorner_01', 'cc_jaw_01', 'cc_jawUp_01', 'cc_stickyLips_01']
-lowerFaceMinor = ['cc_uppLipLRRgt_01', 'cc_uppLipLRMid_01', 'cc_uppLipLRLft_01', 'cc_minor_rSneerLR_01', 'cc_minor_lSneerLR_01', 'cc_uppLipFBLft_01', 'cc_uppLipFBRgt_01', 'cc_uppLipFBMid_01', 'cc_dwnLipLRRgt_01', 'cc_dwnLipLRMid_01', 'cc_dwnLipLRLft_01', 'cc_dwnLipFBLft_01', 'cc_dwnLipFBMid_01', 'cc_dwnLipFBRgt_01', 'cc_jawJutt_01', 'cc_jawUD_01', 'cc_jawLR_01', 'cc_uppLipCRRgt_01', 'cc_uppLipCRMid_01', 'cc_uppLipCRLft_01', 'cc_dwnLipCRRgt_01', 'cc_dwnLipCRMid_01', 'cc_dwnLipCRLft_01', 'cc_uppLipSCALELft_01', 'cc_uppLipSCALEMid_01', 'cc_uppLipSCALERgt_01', 'cc_dwnLipSCALELft_01', 'cc_dwnLipSCALEMid_01', 'cc_dwnLipSCALERgt_01', 'cc_minor_lMouthCorner_01', 'cc_minor_rMouthCorner_01']
-mouthMacro = ['cc_uppLipCurl_01', 'cc_dwnLipCurl_01']
+prefix = ''
+browMacro = []
+browMinor = []
+upperFaceMacro = []
+upperFaceMinor = []
+lowerFaceMacro = []
+lowerFaceMinor = []
+mouthMacro = []
 
+def nameThings(prefix):
+	    
+	browMacroTemp = [prefix + 'cc_rEyeBrowOut_01', prefix + 'cc_rEyeBrowMid_01', prefix + 'cc_rEyeBrowInn_01', prefix + 'cc_rEyeBrowScrunch_01', prefix + 'cc_EyeBrows_01', prefix + 'cc_lEyeBrowScrunch_01', prefix + 'cc_lEyeBrowInn_01', prefix + 'cc_lEyeBrowMid_01', prefix + 'cc_lEyeBrowOut_01']
+	browMacro.extend(browMacroTemp)
+	browMinorTemp = [prefix + 'cc_lBrowTWMid_01', prefix + 'cc_rBrowTWMid_01', prefix + 'cc_lBrowTWOut_01', prefix + 'cc_rBrowTWOut_01', prefix + 'cc_rBrowTWInn_01', prefix + 'cc_rBrowFBOut_01', prefix + 'cc_rBrowFBMid_01', prefix + 'cc_rBrowFBInn_01', prefix + 'cc_lBrowFBInn_01', prefix + 'cc_lBrowFBMid_01', prefix + 'cc_lBrowFBOut_01', prefix + 'cc_lBrowTWInn_01', prefix + 'cc_minor_rEyeBrowOutLR_01', prefix + 'cc_minor_rEyeBrowMidLR_01', prefix + 'cc_minor_rEyeBrowInnLR_01', prefix + 'cc_minor_lEyeBrowInnLR_01', prefix + 'cc_minor_lEyeBrowMidLR_01', prefix + 'cc_minor_lEyeBrowOutLR_01']
+	browMinor.extend(browMinorTemp)
+	upperFaceMacroTemp = [prefix + 'cc_nose_01', prefix + 'cc_noseTW_01', prefix + 'cc_rEyeScale_01', prefix + 'cc_rSquint_01', prefix + 'cc_rIris_01', prefix + 'cc_rPupil_01', prefix + 'cc_rEye_01', prefix + 'cc_rEyeLidDwn_01', prefix + 'cc_rEyeLidAngle_01', prefix + 'cc_lEyeLidAngle_01', prefix + 'cc_rEyeLidUpp_01', prefix + 'cc_lEyeLidDwn_01', prefix + 'cc_lEyeLidUpp_01', prefix + 'cc_lEye_01', prefix + 'cc_lIris_01', prefix + 'cc_lPupil_01', prefix + 'cc_lEyeScale_01', prefix + 'cc_lSquint_01']
+	upperFaceMacro.extend(upperFaceMacroTemp)	
+	upperFaceMinorTemp = [prefix + 'cc_rUppEyeLidLROut_01', prefix + 'cc_rUppEyeLidLRMid_01', prefix + 'cc_rUppEyeLidLRInn_01', prefix + 'cc_minor_rSquintLR_01', prefix + 'cc_rDwnEyeLidLROut_01', prefix + 'cc_rDwnEyeLidLRMid_01', prefix + 'cc_rDwnEyeLidLRInn_01', prefix + 'cc_lDwnEyeLidLRInn_01', prefix + 'cc_lDwnEyeLidLRMid_01', prefix + 'cc_lDwnEyeLidLROut_01', prefix + 'cc_minor_lSquintLR_01', prefix + 'cc_lUppEyeLidLRInn_01', prefix + 'cc_lUppEyeLidLRMid_01', prefix + 'cc_lUppEyeLidLROut_01']
+	upperFaceMinor.extend(upperFaceMinorTemp)	
+	lowerFaceMacroTemp = [prefix + 'cc_rSneer_01', prefix + 'cc_lSneer_01', prefix + 'cc_lMouthCorner_01', prefix + 'cc_rMouthCorner_01', prefix + 'cc_jaw_01', prefix + 'cc_jawUp_01', prefix + 'cc_stickyLips_01']
+	lowerFaceMacro.extend(lowerFaceMacroTemp)	
+	lowerFaceMinorTemp = [prefix + 'cc_uppLipLRRgt_01', prefix + 'cc_uppLipLRMid_01', prefix + 'cc_uppLipLRLft_01', prefix + 'cc_minor_rSneerLR_01', prefix + 'cc_minor_lSneerLR_01', prefix + 'cc_uppLipFBLft_01', prefix + 'cc_uppLipFBRgt_01', prefix + 'cc_uppLipFBMid_01', prefix + 'cc_dwnLipLRRgt_01', prefix + 'cc_dwnLipLRMid_01', prefix + 'cc_dwnLipLRLft_01', prefix + 'cc_dwnLipFBLft_01', prefix + 'cc_dwnLipFBMid_01', prefix + 'cc_dwnLipFBRgt_01', prefix + 'cc_jawJutt_01', prefix + 'cc_jawUD_01', prefix + 'cc_jawLR_01', prefix + 'cc_uppLipCRRgt_01', prefix + 'cc_uppLipCRMid_01', prefix + 'cc_uppLipCRLft_01', prefix + 'cc_dwnLipCRRgt_01', prefix + 'cc_dwnLipCRMid_01', prefix + 'cc_dwnLipCRLft_01', prefix + 'cc_uppLipSCALELft_01', prefix + 'cc_uppLipSCALEMid_01', prefix + 'cc_uppLipSCALERgt_01', prefix + 'cc_dwnLipSCALELft_01', prefix + 'cc_dwnLipSCALEMid_01', prefix + 'cc_dwnLipSCALERgt_01', prefix + 'cc_minor_lMouthCorner_01', prefix + 'cc_minor_rMouthCorner_01']
+	lowerFaceMinor.extend(lowerFaceMinorTemp)	
+	mouthMacroTemp = [prefix + 'cc_uppLipCurl_01', prefix + 'cc_dwnLipCurl_01']
+	mouthMacro.extend(mouthMacroTemp)
     
 def microVisibility(*args):
-    if(cmds.getAttr('grp_micro_face_controls_01.v')==False):
-        cmds.setAttr('grp_micro_face_controls_01.v', 1)
+    if(cmds.getAttr(prefix + 'grp_micro_face_controls_01.v')==False):
+        cmds.setAttr(prefix + 'grp_micro_face_controls_01.v', 1)
         return
-    elif(cmds.getAttr('grp_micro_face_controls_01.v')==True):
-        cmds.setAttr('grp_micro_face_controls_01.v', 0)
+    elif(cmds.getAttr(prefix + 'grp_micro_face_controls_01.v')==True):
+        cmds.setAttr(prefix + 'grp_micro_face_controls_01.v', 0)
         return
 
 def minorVisibility(*args):
-    if(cmds.getAttr('cc_minorHelper_01.v')==False):
-        cmds.setAttr('cc_minorHelper_01.v', 1)
+    if(cmds.getAttr(prefix + 'cc_minorHelper_01.v')==False):
+        cmds.setAttr(prefix + 'cc_minorHelper_01.v', 1)
         return
-    elif(cmds.getAttr('cc_minorHelper_01.v')==True):
-        cmds.setAttr('cc_minorHelper_01.v', 0)
+    elif(cmds.getAttr(prefix + 'cc_minorHelper_01.v')==True):
+        cmds.setAttr(prefix + 'cc_minorHelper_01.v', 0)
         return
         
 def keyMinor(*args):
@@ -50,7 +67,7 @@ def clearAll(*args):
         cmds.cutKey(i, s=True)
 
 def keyAll(*args):
-    if(cmds.getAttr('cc_minorHelper_01.v')==True):
+    if(cmds.getAttr(prefix + 'cc_minorHelper_01.v')==True):
         for i in browMacro:
             cmds.setKeyframe(i)
         for i in browMinor:
@@ -106,7 +123,7 @@ def resetAll(*args):
         cmds.setAttr(i + '.translateZ', 0)                  
                 
 def keyBrows(*args):
-    if(cmds.getAttr('cc_minorHelper_01.v')==True):
+    if(cmds.getAttr(prefix + 'cc_minorHelper_01.v')==True):
         for i in browMacro:
             cmds.setKeyframe(i)
         for i in browMinor:
@@ -116,7 +133,7 @@ def keyBrows(*args):
             cmds.setKeyframe(i)
      
 def keyUpperFace(*args):
-    if(cmds.getAttr('cc_minorHelper_01.v')==True):
+    if(cmds.getAttr(prefix + 'cc_minorHelper_01.v')==True):
         for i in upperFaceMacro:
             cmds.setKeyframe(i)
         for i in upperFaceMinor:
@@ -126,7 +143,7 @@ def keyUpperFace(*args):
             cmds.setKeyframe(i)  
 
 def keyLowerFace(*args):
-    if(cmds.getAttr('cc_minorHelper_01.v')==True):
+    if(cmds.getAttr(prefix + 'cc_minorHelper_01.v')==True):
         for i in lowerFaceMacro:
             cmds.setKeyframe(i)
         for i in lowerFaceMinor:
@@ -136,7 +153,7 @@ def keyLowerFace(*args):
             cmds.setKeyframe(i)  
 
 def keyMouth(*args):
-    if(cmds.getAttr('cc_minorHelper_01.v')==True):
+    if(cmds.getAttr(prefix + 'cc_minorHelper_01.v')==True):
         for i in mouthMacro:
             cmds.setKeyframe(i)
     else:
@@ -176,66 +193,45 @@ def DOIT(*args):
     cmds.warning('Welp, you asked for it.')
 
 def go():
-		
-	if cmds.objExists('papa_mindy_rig_stable:cam_GUIMINDY_01') == True:
-			
-		if cmds.windowPref('window',exists=True): cmds.windowPref('window',remove=True)
-		if cmds.window('window',exists=True): cmds.deleteUI('window',wnd=True)
 
-		newWindow = cmds.window('window', title = 'Mindy Facial GUI', s=False, w=605)
-		form = cmds.formLayout(w=605)
-		mindyEditor = cmds.modelEditor()
-		mindyAll = cmds.button(label = 'Key All', w=50, command = keyAll)
-		mindyRowTop = cmds.rowLayout(parent = form, nc=2)
-		mindyClearAll = cmds.button(label = 'Clear All', w= 296, command = clearAll)
-		mindyResetAll = cmds.button(label = 'Reset All', w= 296, command = resetAll)
-		cmds.setParent( '..' )
-		mindyColumn = cmds.columnLayout(w=605)
-		cmds.button(label = 'K', height=158, command = keyBrows)
-		cmds.button(label = 'K', height=198, command = keyUpperFace)
-		cmds.button(label = 'K', height=295, command = keyLowerFace)
-		cmds.button(label = 'K', height=160, command = keyMouth)
-		mindyRow = cmds.rowLayout(parent = form, nc=3)
-		cmds.button(label = 'Toggle Minor Controls', w=195, command = minorVisibility)
-		cmds.button(label = 'Toggle Micro Controls', w=200, command = microVisibility)
-		cmds.button(label = 'DONT CLICK THIS BUTTON', w=195, command = theyPushedIt)
-		
-		cmds.formLayout( form, edit=True, attachForm=[(mindyEditor, 'top', 5), (mindyEditor, 'left', 5), (mindyAll, 'left', 5), (mindyAll, 'right', 5), (mindyRowTop, 'left', 5), (mindyRowTop, 'right', 5), (mindyRow, 'left', 5), (mindyRow, 'bottom', 5), (mindyRow, 'right', 5), (mindyColumn, 'top', 5), (mindyColumn, 'right', 5) ], attachControl=[(mindyEditor, 'bottom', 5, mindyAll), (mindyColumn, 'bottom', 5, mindyAll), (mindyAll, 'bottom', 5, mindyRowTop),(mindyRowTop, 'bottom', 5, mindyRow)], attachPosition=[(mindyEditor, 'right', 0, 96), (mindyColumn, 'left', 0, 96)], attachNone=(mindyAll, 'top') )
-		
-		cmds.modelEditor( mindyEditor, edit=True, camera= 'papa_mindy_rig_stable:cam_GUIMINDY_01', wos=False, hud=False, gr=False, da = "smoothShaded", handles=False)
-		
-		cmds.showWindow(newWindow)
+	if cmds.objExists('papa_mindy_rig_stable:cam_GUIMINDY_01') == True:
+		prefix = 'papa_mindy_rig_stable:'
 		
 	elif cmds.objExists('cam_GUIMINDY_01') == True: 
-		if cmds.windowPref('window',exists=True): cmds.windowPref('window',remove=True)
-		if cmds.window('window',exists=True): cmds.deleteUI('window',wnd=True)
-
-		newWindow = cmds.window('window', title = 'Mindy Facial GUI', s=False, w=605)
-		form = cmds.formLayout(w=605)
-		mindyEditor = cmds.modelEditor()
-		mindyAll = cmds.button(label = 'Key All', w=50, command = keyAll)
-		mindyRowTop = cmds.rowLayout(parent = form, nc=2)
-		mindyClearAll = cmds.button(label = 'Clear All', w= 296, command = clearAll)
-		mindyResetAll = cmds.button(label = 'Reset All', w= 296, command = resetAll)
-		cmds.setParent( '..' )
-		mindyColumn = cmds.columnLayout(w=605)
-		cmds.button(label = 'K', height=158, command = keyBrows)
-		cmds.button(label = 'K', height=198, command = keyUpperFace)
-		cmds.button(label = 'K', height=295, command = keyLowerFace)
-		cmds.button(label = 'K', height=160, command = keyMouth)
-		mindyRow = cmds.rowLayout(parent = form, nc=3)
-		cmds.button(label = 'Toggle Minor Controls', w=195, command = minorVisibility)
-		cmds.button(label = 'Toggle Micro Controls', w=200, command = microVisibility)
-		cmds.button(label = 'DONT CLICK THIS BUTTON', w=195, command = theyPushedIt)
-		
-		cmds.formLayout( form, edit=True, attachForm=[(mindyEditor, 'top', 5), (mindyEditor, 'left', 5), (mindyAll, 'left', 5), (mindyAll, 'right', 5), (mindyRowTop, 'left', 5), (mindyRowTop, 'right', 5), (mindyRow, 'left', 5), (mindyRow, 'bottom', 5), (mindyRow, 'right', 5), (mindyColumn, 'top', 5), (mindyColumn, 'right', 5) ], attachControl=[(mindyEditor, 'bottom', 5, mindyAll), (mindyColumn, 'bottom', 5, mindyAll), (mindyAll, 'bottom', 5, mindyRowTop),(mindyRowTop, 'bottom', 5, mindyRow)], attachPosition=[(mindyEditor, 'right', 0, 96), (mindyColumn, 'left', 0, 96)], attachNone=(mindyAll, 'top') )
-		
-		cmds.modelEditor( mindyEditor, edit=True, camera= 'cam_GUIMINDY_01', wos=False, hud=False, gr=False, da = "smoothShaded", handles=False)
-		
-		cmds.showWindow(newWindow)
+		prefix = ''
 		
 	else:
-		confirm = cmds.confirmDialog(title='Error', message='Make sure Mindy is in your scene.', button='Ok', defaultButton='Ok', dismissString='Ok' )
+		confirm = cmds.confirmDialog(title='Error', message='Make sure Mindy is in your scene.', button='Ok', defaultButton='Ok')
+		return
+    
+	if cmds.windowPref('window',exists=True): cmds.windowPref('window',remove=True)
+	if cmds.window('window',exists=True): cmds.deleteUI('window',wnd=True)
+	
+	nameThings(prefix)
+	
+	newWindow = cmds.window('window', title = 'Mindy Facial GUI', s=False, w=605)
+	form = cmds.formLayout(w=605)
+	mindyEditor = cmds.modelEditor()
+	mindyAll = cmds.button(label = 'Key All', w=50, command = keyAll)
+	mindyRowTop = cmds.rowLayout(parent = form, nc=2)
+	mindyClearAll = cmds.button(label = 'Clear All', w= 296, command = clearAll)
+	mindyResetAll = cmds.button(label = 'Reset All', w= 296, command = resetAll)
+	cmds.setParent( '..' )
+	mindyColumn = cmds.columnLayout(w=605)
+	cmds.button(label = 'K', height=158, command = keyBrows)
+	cmds.button(label = 'K', height=198, command = keyUpperFace)
+	cmds.button(label = 'K', height=295, command = keyLowerFace)
+	cmds.button(label = 'K', height=160, command = keyMouth)
+	mindyRow = cmds.rowLayout(parent = form, nc=3)
+	cmds.button(label = 'Toggle Minor Controls', w=195, command = minorVisibility)
+	cmds.button(label = 'Toggle Micro Controls', w=200, command = microVisibility)
+	cmds.button(label = 'DONT CLICK THIS BUTTON', w=195, command = theyPushedIt)
+	
+	cmds.formLayout( form, edit=True, attachForm=[(mindyEditor, 'top', 5), (mindyEditor, 'left', 5), (mindyAll, 'left', 5), (mindyAll, 'right', 5), (mindyRowTop, 'left', 5), (mindyRowTop, 'right', 5), (mindyRow, 'left', 5), (mindyRow, 'bottom', 5), (mindyRow, 'right', 5), (mindyColumn, 'top', 5), (mindyColumn, 'right', 5) ], attachControl=[(mindyEditor, 'bottom', 5, mindyAll), (mindyColumn, 'bottom', 5, mindyAll), (mindyAll, 'bottom', 5, mindyRowTop),(mindyRowTop, 'bottom', 5, mindyRow)], attachPosition=[(mindyEditor, 'right', 0, 96), (mindyColumn, 'left', 0, 96)], attachNone=(mindyAll, 'top') )
+	
+	cmds.modelEditor( mindyEditor, edit=True, camera= prefix + 'cam_GUIMINDY_01', wos=False, hud=False, gr=False, da = "smoothShaded", handles=False)
+	
+	cmds.showWindow(newWindow)
 
 	
 go()
