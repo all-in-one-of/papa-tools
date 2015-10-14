@@ -19,9 +19,9 @@ def nameThings(prefix):
 	browMinorTemp = [prefix + 'cc_lBrowTWMid_01', prefix + 'cc_rBrowTWMid_01', prefix + 'cc_lBrowTWOut_01', prefix + 'cc_rBrowTWOut_01', prefix + 'cc_rBrowTWInn_01', prefix + 'cc_rBrowFBOut_01', prefix + 'cc_rBrowFBMid_01', prefix + 'cc_rBrowFBInn_01', prefix + 'cc_lBrowFBInn_01', prefix + 'cc_lBrowFBMid_01', prefix + 'cc_lBrowFBOut_01', prefix + 'cc_lBrowTWInn_01', prefix + 'cc_minor_rEyeBrowOutLR_01', prefix + 'cc_minor_rEyeBrowMidLR_01', prefix + 'cc_minor_rEyeBrowInnLR_01', prefix + 'cc_minor_lEyeBrowInnLR_01', prefix + 'cc_minor_lEyeBrowMidLR_01', prefix + 'cc_minor_lEyeBrowOutLR_01']
 	browMinor.extend(browMinorTemp)
 	
-	upperFaceMacroTemp = [prefix + 'cc_nose_01', prefix + 'cc_noseTW_01', prefix + 'cc_rEyeScale_01', prefix + 'cc_rSquint_01', prefix + 'cc_rIris_01', prefix + 'cc_rPupil_01', prefix + 'cc_rEye_01', prefix + 'cc_rEyeLidDwn_01', prefix + 'cc_rEyeLidAngle_01', prefix + 'cc_lEyeLidAngle_01', prefix + 'cc_rEyeLidUpp_01', prefix + 'cc_lEyeLidDwn_01', prefix + 'cc_lEyeLidUpp_01', prefix + 'cc_lEye_01', prefix + 'cc_lIris_01', prefix + 'cc_lPupil_01', prefix + 'cc_lEyeScale_01', prefix + 'cc_lSquint_01']
+	upperFaceMacroTemp = [prefix + 'cc_rEyeScale_01', prefix + 'cc_rSquint_01', prefix + 'cc_rIris_01', prefix + 'cc_rPupil_01', prefix + 'cc_rEye_01', prefix + 'cc_rEyeLidDwn_01', prefix + 'cc_rEyeLidAngle_01', prefix + 'cc_lEyeLidAngle_01', prefix + 'cc_rEyeLidUpp_01', prefix + 'cc_lEyeLidDwn_01', prefix + 'cc_lEyeLidUpp_01', prefix + 'cc_lEye_01', prefix + 'cc_lIris_01', prefix + 'cc_lPupil_01', prefix + 'cc_lEyeScale_01', prefix + 'cc_lSquint_01']
 	upperFaceMacro.extend(upperFaceMacroTemp)	
-	upperFaceMinorTemp = [prefix + 'cc_lUppEyeLidUDInn_01', prefix + 'cc_lUppEyeLidLRInn_01', prefix + 'cc_lUppEyeLidLRMid_01', prefix + 'cc_minor_rEyeBrowMid_01', prefix + 'cc_lUppEyeLidUDOut_01', prefix + 'cc_lUppEyeLidLROut_01', prefix + 'cc_lDwnEyeLidUDInn_01', prefix + 'cc_lDwnEyeLidLRInn_01', prefix + 'cc_lDwnEyeLidUDMid_01', prefix + 'cc_lDwnEyeLidLRMid_01', prefix + 'cc_lDwnEyeLidUDOut_01', prefix + 'cc_lDwnEyeLidLROut_01', prefix + 'cc_minor_lSquintLROut_01', prefix + 'cc_rSquintOut_01', prefix + 'cc_minor_rSquintLROut_01', prefix + 'cc_rSquintMid_01', prefix + 'cc_minor_rSquintLRMid_01', prefix + 'cc_rSquintInn_01', prefix + 'cc_minor_rSquintLRInn_01', prefix + 'cc_rUppEyeLidUDOut_01', prefix + 'cc_rUppEyeLidLROut_01', prefix + 'cc_rUppEyeLidUDMid_01', prefix + 'cc_rUppEyeLidLRMid_01', prefix + 'cc_rUppEyeLidUDInn_01', prefix + 'cc_rUppEyeLidLRInn_01', prefix + 'cc_rDwnEyeLidUDOut_01', prefix + 'cc_rDwnEyeLidLROut_01', prefix + 'cc_rDwnEyeLidUDMid_01', prefix + 'cc_rDwnEyeLidLRMid_01', prefix + 'cc_rDwnEyeLidUDInn_01', prefix + 'cc_rDwnEyeLidLRInn_01', prefix + 'cc_lSquintInn_01', prefix + 'cc_minor_lSquintLRInn_01', prefix + 'cc_lSquintMid_01', prefix + 'cc_minor_lSquintLRMid_01', prefix + 'cc_lSquintOut_01', prefix + 'cc_rUppEyeLidLROut_01', prefix + 'cc_rUppEyeLidLRMid_01', prefix + 'cc_rUppEyeLidLRInn_01', prefix + 'cc_minor_rSquintLR_01', prefix + 'cc_rDwnEyeLidLROut_01', prefix + 'cc_rDwnEyeLidLRMid_01', prefix + 'cc_rDwnEyeLidLRInn_01', prefix + 'cc_lDwnEyeLidLRInn_01', prefix + 'cc_lDwnEyeLidLRMid_01', prefix + 'cc_lDwnEyeLidLROut_01', prefix + 'cc_minor_lSquintLR_01', prefix + 'cc_lUppEyeLidLRInn_01', prefix + 'cc_lUppEyeLidLRMid_01', prefix + 'cc_lUppEyeLidLROut_01']
+	upperFaceMinorTemp = [prefix + 'cc_noseTW_01', prefix + 'cc_nose_01', prefix + 'cc_noseFB_01', prefix + 'cc_lEye_01', prefix + 'cc_rEye_01', prefix + 'cc_lUppEyeLidUDInn_01', prefix + 'cc_lUppEyeLidLRInn_01', prefix + 'cc_lUppEyeLidLRMid_01', prefix + 'cc_minor_rEyeBrowMid_01', prefix + 'cc_lUppEyeLidUDOut_01', prefix + 'cc_lUppEyeLidLROut_01', prefix + 'cc_lDwnEyeLidUDInn_01', prefix + 'cc_lDwnEyeLidLRInn_01', prefix + 'cc_lDwnEyeLidUDMid_01', prefix + 'cc_lDwnEyeLidLRMid_01', prefix + 'cc_lDwnEyeLidUDOut_01', prefix + 'cc_lDwnEyeLidLROut_01', prefix + 'cc_minor_lSquintLROut_01', prefix + 'cc_rSquintOut_01', prefix + 'cc_minor_rSquintLROut_01', prefix + 'cc_rSquintMid_01', prefix + 'cc_minor_rSquintLRMid_01', prefix + 'cc_rSquintInn_01', prefix + 'cc_minor_rSquintLRInn_01', prefix + 'cc_rUppEyeLidUDOut_01', prefix + 'cc_rUppEyeLidLROut_01', prefix + 'cc_rUppEyeLidUDMid_01', prefix + 'cc_rUppEyeLidLRMid_01', prefix + 'cc_rUppEyeLidUDInn_01', prefix + 'cc_rUppEyeLidLRInn_01', prefix + 'cc_rDwnEyeLidUDOut_01', prefix + 'cc_rDwnEyeLidLROut_01', prefix + 'cc_rDwnEyeLidUDMid_01', prefix + 'cc_rDwnEyeLidLRMid_01', prefix + 'cc_rDwnEyeLidUDInn_01', prefix + 'cc_rDwnEyeLidLRInn_01', prefix + 'cc_lSquintInn_01', prefix + 'cc_minor_lSquintLRInn_01', prefix + 'cc_lSquintMid_01', prefix + 'cc_minor_lSquintLRMid_01', prefix + 'cc_lSquintOut_01', prefix + 'cc_rUppEyeLidLROut_01', prefix + 'cc_rUppEyeLidLRMid_01', prefix + 'cc_rUppEyeLidLRInn_01', prefix + 'cc_minor_rSquintLR_01', prefix + 'cc_rDwnEyeLidLROut_01', prefix + 'cc_rDwnEyeLidLRMid_01', prefix + 'cc_rDwnEyeLidLRInn_01', prefix + 'cc_lDwnEyeLidLRInn_01', prefix + 'cc_lDwnEyeLidLRMid_01', prefix + 'cc_lDwnEyeLidLROut_01', prefix + 'cc_minor_lSquintLR_01', prefix + 'cc_lUppEyeLidLRInn_01', prefix + 'cc_lUppEyeLidLRMid_01', prefix + 'cc_lUppEyeLidLROut_01']
 	upperFaceMinor.extend(upperFaceMinorTemp)
 	
 	lowerFaceMacroTemp = [prefix + 'cc_uppLipUDRgt_01', prefix + 'cc_uppLidUDMid_01', prefix + 'cc_uppLipUDLft_01', prefix + 'cc_dwnLipUDRgt_01', prefix + 'cc_dwnLidUDMid_01', prefix + 'cc_dwnLipUDLft_01', prefix + 'cc_rSneer_01', prefix + 'cc_lSneer_01', prefix + 'cc_lMouthCorner_01', prefix + 'cc_rMouthCorner_01', prefix + 'cc_jaw_01', prefix + 'cc_jawUp_01', prefix + 'cc_stickyLips_01']
@@ -29,9 +29,9 @@ def nameThings(prefix):
 	lowerFaceMinorTemp = [prefix + 'cc_jawTW_01', prefix + 'cc_uppLipLRRgt_01', prefix + 'cc_uppLipLRMid_01', prefix + 'cc_uppLipLRLft_01', prefix + 'cc_minor_rSneerLR_01', prefix + 'cc_minor_lSneerLR_01', prefix + 'cc_uppLipFBLft_01', prefix + 'cc_uppLipFBRgt_01', prefix + 'cc_uppLipFBMid_01', prefix + 'cc_dwnLipLRRgt_01', prefix + 'cc_dwnLipLRMid_01', prefix + 'cc_dwnLipLRLft_01', prefix + 'cc_dwnLipFBLft_01', prefix + 'cc_dwnLipFBMid_01', prefix + 'cc_dwnLipFBRgt_01', prefix + 'cc_jawJutt_01', prefix + 'cc_jawUD_01', prefix + 'cc_jawLR_01', prefix + 'cc_uppLipCRRgt_01', prefix + 'cc_uppLipCRMid_01', prefix + 'cc_uppLipCRLft_01', prefix + 'cc_dwnLipCRRgt_01', prefix + 'cc_dwnLipCRMid_01', prefix + 'cc_dwnLipCRLft_01', prefix + 'cc_uppLipSCALELft_01', prefix + 'cc_uppLipSCALEMid_01', prefix + 'cc_uppLipSCALERgt_01', prefix + 'cc_dwnLipSCALELft_01', prefix + 'cc_dwnLipSCALEMid_01', prefix + 'cc_dwnLipSCALERgt_01', prefix + 'cc_minor_lMouthCorner_01', prefix + 'cc_minor_rMouthCorner_01']
 	lowerFaceMinor.extend(lowerFaceMinorTemp)	
 	
-	mouthMacroTemp = [prefix + 'cc_mouth_01', prefix + 'cc_uppLipCurl_01', prefix + 'cc_dwnLipCurl_01']
+	mouthMacroTemp = [prefix + 'cc_mouthTW_01', prefix + 'cc_mouth_01', prefix + 'cc_uppLipCurl_01', prefix + 'cc_dwnLipCurl_01']
 	mouthMacro.extend(mouthMacroTemp)
-	mouthMinorTemp = [prefix + 'cc_mouthTW_01', prefix + 'cc_mouthFB_01']
+	mouthMinorTemp = [prefix + 'cc_mouthFB_01']
 	mouthMinor.extend(mouthMinorTemp)
     
 def microVisibility(prefix, *args):
@@ -45,9 +45,25 @@ def microVisibility(prefix, *args):
 def minorVisibility(prefix, *args):
     if(cmds.getAttr(prefix + 'cc_minorHelper_01.v')==False):
         cmds.setAttr(prefix + 'cc_minorHelper_01.v', 1)
+        for s in browMinor:
+            cmds.setAttr(s + '.v', 1)
+        for s in upperFaceMinor:
+            cmds.setAttr(s + '.v', 1)
+        for s in lowerFaceMinor:
+            cmds.setAttr(s + '.v', 1)
+        for s in mouthMinor:
+            cmds.setAttr(s + '.v', 1)                                    
         return
     elif(cmds.getAttr(prefix + 'cc_minorHelper_01.v')==True):
         cmds.setAttr(prefix + 'cc_minorHelper_01.v', 0)
+        for s in browMinor:
+            cmds.setAttr(s + '.v', 0)
+        for s in upperFaceMinor:
+            cmds.setAttr(s + '.v', 0)
+        for s in lowerFaceMinor:
+            cmds.setAttr(s + '.v', 0)
+        for s in mouthMinor:
+            cmds.setAttr(s + '.v', 0)  
         return
         
 def keyMinor(*args):
@@ -112,35 +128,35 @@ def resetAll(*args):
     for i in browMacro:
         cmds.setAttr(i + '.translateX', 0)
         cmds.setAttr(i + '.translateY', 0)      
-        cmds.setAttr(i + '.translateZ', 0)          
+       
     for i in browMinor:
         cmds.setAttr(i + '.translateX', 0)
         cmds.setAttr(i + '.translateY', 0)      
-        cmds.setAttr(i + '.translateZ', 0)          
+       
     for i in upperFaceMacro:
         cmds.setAttr(i + '.translateX', 0)
         cmds.setAttr(i + '.translateY', 0)      
-        cmds.setAttr(i + '.translateZ', 0)          
+      
     for i in upperFaceMinor:
         cmds.setAttr(i + '.translateX', 0)
         cmds.setAttr(i + '.translateY', 0)      
-        cmds.setAttr(i + '.translateZ', 0)          
+    
     for i in lowerFaceMacro:
         cmds.setAttr(i + '.translateX', 0)
         cmds.setAttr(i + '.translateY', 0)      
-        cmds.setAttr(i + '.translateZ', 0)                  
+              
     for i in lowerFaceMinor:
         cmds.setAttr(i + '.translateX', 0)
         cmds.setAttr(i + '.translateY', 0)      
-        cmds.setAttr(i + '.translateZ', 0)          
+     
     for i in mouthMacro:
         cmds.setAttr(i + '.translateX', 0)
         cmds.setAttr(i + '.translateY', 0)      
-        cmds.setAttr(i + '.translateZ', 0)
+
     for i in mouthMinor:
         cmds.setAttr(i + '.translateX', 0)
         cmds.setAttr(i + '.translateY', 0)      
-        cmds.setAttr(i + '.translateZ', 0)                 
+             
                 
 def keyBrows(prefix, *args):
     if(cmds.getAttr(prefix + 'cc_minorHelper_01.v')==True):
