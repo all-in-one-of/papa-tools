@@ -71,7 +71,7 @@
 			"python_file":"mindyFacialGUI.py"
         },
         {
-			"icon": "mindyFacialIcon.xpm",
+			"icon": "papa.xpm",
 			"annotation": "Papa Facial GUI",
 			"python_file":"papaFacialGUI.py"
         }
