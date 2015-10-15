@@ -69,6 +69,11 @@
 			"icon": "mindyFacialIcon.xpm",
 			"annotation": "Mindy Facial GUI",
 			"python_file":"mindyFacialGUI.py"
+        },
+        {
+			"icon": "mindyFacialIcon.xpm",
+			"annotation": "Papa Facial GUI",
+			"python_file":"papaFacialGUI.py"
         }
     ]
 }
