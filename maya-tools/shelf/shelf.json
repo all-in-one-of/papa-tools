@@ -70,5 +70,10 @@
 			"annotation": "Mindy Facial GUI",
 			"python_file":"mindyFacialGUI.py"
         }
+        {
+			"icon": "steveFacialIcon.xpm",
+			"annotation": "Steve Facial GUI",
+			"python_file":"steveFacialGUI.py"
+        }
     ]
 }
