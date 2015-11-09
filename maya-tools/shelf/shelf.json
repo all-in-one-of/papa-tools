@@ -75,5 +75,10 @@
 			"annotation": "Papa Facial GUI",
 			"python_file":"papaFacialGUI.py"
         }
+        {
+			"icon": "steveFacialIcon.xpm",
+			"annotation": "Steve Facial GUI",
+			"python_file":"steveFacialGUI.py"
+        }
     ]
 }
